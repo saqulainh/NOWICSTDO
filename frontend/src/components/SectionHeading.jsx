@@ -3,20 +3,14 @@ import ScrollReveal from './ScrollReveal';
 export default function SectionHeading({ eyebrow, title, description, align = 'center' }) {
   return (
     <ScrollReveal
-      className={`max-w-3xl ${align === 'center' ? 'mx-auto text-center' : 'text-left'}`}
+      className={`max-w-2xl ${align === 'center' ? 'mx-auto text-center' : 'text-left'}`}
       delay={0.05}
     >
       {eyebrow && (
-        <span className="eyebrow-pill mb-6 inline-flex">
-          <span
-            className="h-1.5 w-1.5 rounded-full"
-            style={{ background: 'linear-gradient(135deg,#5fffc0,#34e8a1)' }}
-          />
-          {eyebrow}
-        </span>
+        <p className="eyebrow mb-4">{eyebrow}</p>
       )}
 
-      <h2 className="font-display text-3xl font-extrabold leading-tight text-text sm:text-4xl lg:text-5xl">
+      <h2 className="font-display text-3xl font-bold leading-tight text-text sm:text-4xl">
         {typeof title === 'string'
           ? title.split('|').map((part, i) =>
               i % 2 === 1
@@ -28,7 +22,7 @@ export default function SectionHeading({ eyebrow, title, description, align = 'c
       </h2>
 
       {description && (
-        <p className="mt-5 text-base leading-relaxed text-muted sm:text-lg">
+        <p className="mt-4 text-base leading-relaxed text-sub">
           {description}
         </p>
       )}

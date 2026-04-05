@@ -4,353 +4,419 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ===========================
-   CUSTOM PROPERTIES
-=========================== */
+/* ═══════════════════════════════════
+   BASE - Clean Neutral Dark Mode
+═══════════════════════════════════ */
 @layer base {
-  :root {
-    --mint:    52 232 161;
-    --jade:    31 200 125;
-    --glow:    95 255 192;
-    --angle:   0deg;
-  }
-
   html {
     scroll-behavior: smooth;
     scrollbar-width: thin;
-    scrollbar-color: rgba(52,232,161,0.3) rgba(8,31,18,0.5);
+    scrollbar-color: #2a2c36 #0e0f14;
   }
 
-  html, body, #root {
-    min-height: 100%;
-  }
+  html, body, #root { min-height: 100%; }
 
   body {
-    @apply bg-mesh text-text font-body antialiased;
+    @apply font-body antialiased;
+    color: #f0f0f3;
+    background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(52,217,154,0.08) 0%, transparent 60%), linear-gradient(170deg, #060608 0%, #0a0b10 50%, #060608 100%);
     background-attachment: fixed;
   }
 
-  *::-webkit-scrollbar         { width: 6px; }
-  *::-webkit-scrollbar-track   { background: rgba(8,31,18,0.5); }
-  *::-webkit-scrollbar-thumb   { background: rgba(52,232,161,0.3); border-radius: 3px; }
-  *::-webkit-scrollbar-thumb:hover { background: rgba(52,232,161,0.5); }
+  *::-webkit-scrollbar         { width: 5px; }
+  *::-webkit-scrollbar-track   { background: #0e0f14; }
+  *::-webkit-scrollbar-thumb   { background: #2a2c36; border-radius: 4px; }
+  *::-webkit-scrollbar-thumb:hover { background: #3a3d4a; }
 
-  ::selection { background: rgba(52,232,161,0.28); color: #e2f5ec; }
+  ::selection { background: rgba(52,217,154,0.2); color: #f0f0f3; }
 
   h1, h2, h3, h4, h5 {
     @apply font-display;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.025em;
   }
 }
 
-/* ===========================
-   GLOBAL COMPONENTS
-=========================== */
+/* ═══════════════════════════════════
+   COMPONENTS - Professional, Clean
+═══════════════════════════════════ */
 @layer components {
 
-  /* ---- Layout ---- */
+  /* ── Layout ── */
   .container-shell {
     @apply mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10;
   }
 
-  /* ---- Glass Cards ---- */
-  .glass-card {
-    @apply relative overflow-hidden rounded-3xl;
-    background: linear-gradient(145deg, rgba(13,46,28,0.65) 0%, rgba(8,31,18,0.45) 100%);
-    backdrop-filter: blur(20px) saturate(140%);
-    border: 1px solid rgba(52,232,161,0.14);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(52,232,161,0.12);
-    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease, border-color 0.3s ease;
+  /* ── Card: Clean solid surface (DEFAULT) ── */
+  .card {
+    @apply rounded-2xl;
+    background: #0e0f14;
+    border: 1px solid #1e2028;
+    transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
   }
 
-  .glass-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(52,232,161,0.5), transparent);
+  .card:hover {
+    border-color: #2a2c36;
+    transform: translateY(-3px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.35);
+  }
+
+  /* ── Card: Subtle glass (ONLY for special/hero elements) ── */
+  .glass-card {
+    @apply rounded-2xl;
+    background: rgba(14,15,20,0.7);
+    backdrop-filter: blur(16px) saturate(120%);
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 16px 48px rgba(0,0,0,0.3);
+    transition: border-color 0.25s ease, transform 0.25s ease;
   }
 
   .glass-card:hover {
-    transform: translateY(-6px) scale(1.005);
-    border-color: rgba(52,232,161,0.28);
-    box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 40px rgba(52,232,161,0.12), inset 0 1px 0 rgba(52,232,161,0.2);
+    border-color: rgba(255,255,255,0.1);
+    transform: translateY(-3px);
   }
 
-  /* Shine sweep on hover */
-  .glass-card::after {
+  /* ── Card: Feature (gradient left border accent) ── */
+  .feature-card {
+    @apply rounded-2xl p-6 relative;
+    background: #0e0f14;
+    border: 1px solid #1e2028;
+    transition: all 0.25s ease;
+  }
+
+  .feature-card::before {
     content: '';
     position: absolute;
-    inset: 0;
-    background: linear-gradient(105deg, transparent 40%, rgba(52,232,161,0.06) 50%, transparent 60%);
-    background-size: 200% 100%;
-    background-position: -200% 0;
-    transition: background-position 0.6s ease;
-  }
-
-  .glass-card:hover::after {
-    background-position: 200% 0;
-  }
-
-  /* ---- Neo Card (Deep Panels) ---- */
-  .neo-card {
-    @apply rounded-3xl;
-    background: linear-gradient(145deg, #0d2e1c 0%, #081f12 100%);
-    border: 1px solid rgba(26,74,43,0.7);
-    box-shadow: 8px 8px 24px #020d08, -6px -6px 20px #0e2516, inset 0 1px 0 rgba(52,232,161,0.06);
-  }
-
-  /* ---- Stat Card ---- */
-  .stat-card {
-    @apply glass-card p-6 flex flex-col gap-2;
-  }
-
-  /* ---- Service Card ---- */
-  .service-card {
-    @apply glass-card p-7 h-full;
-  }
-
-  /* ---- Navbar ---- */
-  .nav-link {
-    @apply relative text-sm font-medium tracking-wide text-muted transition-colors duration-200;
-  }
-
-  .nav-link::after {
-    content: '';
-    position: absolute; bottom: -4px; left: 0;
-    width: 0; height: 1.5px;
-    background: linear-gradient(90deg, #34e8a1, #1fc87d);
-    transition: width 0.3s cubic-bezier(0.34,1.56,0.64,1);
-    border-radius: 1px;
-  }
-
-  .nav-link:hover,
-  .nav-link.active {
-    @apply text-mint;
-  }
-
-  .nav-link:hover::after,
-  .nav-link.active::after {
-    width: 100%;
-  }
-
-  /* ---- CTA Button (Primary) ---- */
-  .cta-btn {
-    @apply relative inline-flex items-center justify-center rounded-2xl px-6 py-3 text-sm font-bold tracking-wide overflow-hidden;
-    background: linear-gradient(135deg, #34e8a1 0%, #1fc87d 55%, #0ea560 100%);
-    color: #030f09;
-    box-shadow: 0 4px 24px rgba(52,232,161,0.38), 0 1px 0 rgba(255,255,255,0.15) inset;
-    transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease, filter 0.2s ease;
-  }
-
-  .cta-btn::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: linear-gradient(135deg, #5fffc0 0%, #34e8a1 55%, #1fc87d 100%);
+    left: 0; top: 12px; bottom: 12px; width: 2px;
+    background: linear-gradient(180deg, #34d99a, #22c97d);
+    border-radius: 2px;
     opacity: 0;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.25s ease;
+  }
+
+  .feature-card:hover {
+    border-color: rgba(52,217,154,0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.35);
+  }
+
+  .feature-card:hover::before { opacity: 1; }
+
+  /* ── Navbar link ── */
+  .nav-link {
+    @apply relative text-sm font-medium transition-colors duration-200 py-1;
+    color: #b0b3c0;
+  }
+  .nav-link:hover, .nav-link.active { color: #f0f0f3; }
+  /* ── CTA Button ── */
+  .cta-btn {
+    @apply relative inline-flex items-center justify-center rounded px-6 py-3 text-sm font-bold uppercase tracking-wider overflow-hidden;
+    background-color: #34d99a;
+    color: #060608;
+    border: 2px solid #060608;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    /* Layered 3D retro shadow using brand colors */
+    box-shadow:
+      2px 2px 0px #22c97d,
+      4px 4px 0px #1ab56e,
+      6px 6px 0px #129d5d,
+      8px 8px 0px #0c864e,
+      10px 10px 0px #086d3e,
+      12px 12px 0px #04542d;
   }
 
   .cta-btn:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 8px 40px rgba(52,232,161,0.55), 0 1px 0 rgba(255,255,255,0.2) inset;
+    background-color: #5eeeb5;
+    color: #060608;
+    box-shadow: 
+      2px 2px 0px #22c97d,
+      4px 4px 0px #1ab56e;
+    transform: translate(8px, 8px);
   }
 
-  .cta-btn:hover::before { opacity: 1; }
-  .cta-btn:active         { transform: translateY(0) scale(0.98); }
+  .cta-btn:active {
+    transform: translate(12px, 12px);
+    box-shadow: none;
+  }
 
-  .cta-btn span { position: relative; z-index: 1; }
-
-  /* ---- Outline Button ---- */
+  /* ── Outline Button ── */
   .outline-btn {
-    @apply inline-flex items-center justify-center rounded-2xl border px-6 py-3 text-sm font-semibold transition-all duration-200;
-    border-color: rgba(52,232,161,0.35);
-    color: #34e8a1;
-    background: transparent;
+    @apply relative inline-flex items-center justify-center rounded border-2 px-6 py-3 text-sm font-bold uppercase tracking-wider transition-all duration-300;
+    border-color: #2a2c36;
+    background-color: #0e0f14;
+    color: #f0f0f3;
+    /* Grey/dark layering for secondary button */
+    box-shadow:
+      2px 2px 0px #1e2028,
+      4px 4px 0px #2a2c36,
+      6px 6px 0px #3a3d4a,
+      8px 8px 0px #4a4e5d,
+      10px 10px 0px #5c6071;
   }
 
   .outline-btn:hover {
-    background: rgba(52,232,161,0.1);
-    border-color: rgba(52,232,161,0.65);
-    box-shadow: 0 0 24px rgba(52,232,161,0.18);
-    transform: translateY(-2px);
-    color: #5fffc0;
+    border-color: #3a3d4a;
+    background-color: #1e2028;
+    color: #fff;
+    box-shadow: 
+      2px 2px 0px #1e2028,
+      4px 4px 0px #2a2c36;
+    transform: translate(6px, 6px);
+  }
+  
+  .outline-btn:active {
+    transform: translate(10px, 10px);
+    box-shadow: none;
   }
 
-  /* ---- Ghost Button ---- */
-  .ghost-btn {
-    @apply inline-flex items-center gap-2 text-sm font-medium text-muted transition-colors duration-200;
+  /* ── Portfolio / Elegant Button ── */
+  .portfolio-btn {
+    @apply relative inline-flex items-center justify-center font-medium;
+    min-width: 100px;
+    padding: 10px 16px;
+    border: 0;
+    border-radius: 7px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    background: radial-gradient(
+      ellipse at bottom,
+      rgba(71, 81, 92, 0.8) 0%,
+      rgba(14, 15, 20, 0.9) 45%
+    );
+    color: rgba(255, 255, 255, 0.66);
+    transition: all 0.6s cubic-bezier(0.15, 0.83, 0.66, 1);
   }
 
-  .ghost-btn:hover { @apply text-mint; }
-
-  /* ---- Icon Badge ---- */
-  .icon-badge {
-    @apply inline-flex items-center justify-center rounded-2xl p-3;
-    background: linear-gradient(145deg, rgba(52,232,161,0.15) 0%, rgba(31,200,125,0.08) 100%);
-    border: 1px solid rgba(52,232,161,0.25);
-    color: #34e8a1;
-    transition: all 0.2s ease;
+  .portfolio-btn::before {
+    content: "";
+    width: 70%;
+    height: 1px;
+    position: absolute;
+    bottom: 0;
+    left: 15%;
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 1) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    opacity: 0.2;
+    transition: all 0.6s cubic-bezier(0.15, 0.83, 0.66, 1);
   }
 
-  .glass-card:hover .icon-badge {
-    background: linear-gradient(145deg, rgba(52,232,161,0.25) 0%, rgba(31,200,125,0.15) 100%);
-    border-color: rgba(52,232,161,0.45);
-    box-shadow: 0 0 20px rgba(52,232,161,0.25);
+  .portfolio-btn:hover {
+    color: rgba(255, 255, 255, 1);
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: inset 0 0 0 1px rgba(52, 217, 154, 0.3);
   }
 
-  /* ---- Section Eyebrow ---- */
-  .eyebrow-text {
-    @apply inline-flex items-center gap-2 text-2xs font-bold uppercase tracking-[0.3em] text-mint;
+  .portfolio-btn:hover::before {
+    opacity: 1;
+    background: linear-gradient(
+      90deg,
+      rgba(52, 217, 154, 0) 0%,
+      rgba(52, 217, 154, 1) 50%,
+      rgba(52, 217, 154, 0) 100%
+    );
   }
 
-  .eyebrow-pill {
-    @apply inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-2xs font-bold uppercase tracking-[0.28em] text-mint;
-    background: rgba(52,232,161,0.1);
-    border: 1px solid rgba(52,232,161,0.25);
+  /* ── Tag / Pill ── */
+  .tag {
+    @apply rounded-full px-3 py-1 text-xs font-medium;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    color: #b0b3c0;
   }
 
-  /* ---- Input Fields ---- */
+  /* ── Eyebrow (section label) ── */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em];
+    color: #34d99a;
+  }
+
+  /* ── Icon wrapper ── */
+  .icon-box {
+    @apply inline-flex items-center justify-center rounded-xl h-10 w-10;
+    background: rgba(52,217,154,0.1);
+    color: #34d99a;
+  }
+
+  /* ── Input fields ── */
   .field {
-    @apply w-full rounded-2xl px-5 py-3.5 text-sm text-text outline-none transition-all duration-200;
-    background: rgba(8,31,18,0.6);
-    border: 1px solid rgba(52,232,161,0.15);
-    caret-color: #34e8a1;
+    @apply w-full rounded-xl px-4 py-3 text-sm outline-none transition-all duration-200;
+    color: #f0f0f3;
+    background: #0e0f14;
+    border: 1px solid #1e2028;
+    caret-color: #34d99a;
   }
 
-  .field::placeholder { color: rgba(125,184,154,0.5); }
+  .field::placeholder { color: #6b6f80; }
 
   .field:focus {
-    border-color: rgba(52,232,161,0.45);
-    background: rgba(13,46,28,0.7);
-    box-shadow: 0 0 0 3px rgba(52,232,161,0.1);
+    border-color: #34d99a;
+    box-shadow: 0 0 0 3px rgba(52,217,154,0.08);
   }
 
-  /* ---- Divider ---- */
-  .section-divider {
-    @apply w-full h-px my-16;
-    background: linear-gradient(90deg, transparent, rgba(52,232,161,0.2), transparent);
+  /* ── Divider ── */
+  .divider {
+    @apply w-full h-px;
+    background: #1e2028;
   }
 
-  /* ---- Tag Pill ---- */
-  .tag-pill {
-    @apply rounded-full px-3 py-1 text-2xs font-medium tracking-wide;
-    background: rgba(52,232,161,0.09);
-    border: 1px solid rgba(52,232,161,0.2);
-    color: rgba(52,232,161,0.85);
-  }
-
-  /* ---- Gradient Badge ---- */
-  .gradient-badge {
-    @apply rounded-full px-4 py-1 text-2xs font-bold uppercase tracking-[0.25em];
-    background: linear-gradient(135deg, rgba(52,232,161,0.18), rgba(31,200,125,0.12));
-    border: 1px solid rgba(52,232,161,0.28);
-    color: #34e8a1;
-  }
-
-  /* ---- Animated Gradient Border ---- */
-  .glow-border {
-    position: relative;
-    border-radius: 1.5rem;
-  }
-
-  .glow-border::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(var(--angle, 0deg), #34e8a1, #1fc87d, #030f09, #34e8a1);
-    -webkit-mask:
-      linear-gradient(#fff 0 0) content-box,
-      linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    animation: border-spin 4s linear infinite;
-  }
-
-  /* ---- Number Stat ---- */
-  .number-stat {
-    @apply font-display font-extrabold;
-    background: linear-gradient(135deg, #5fffc0, #34e8a1 50%, #1fc87d);
+  /* ── Gradient text ── */
+  .text-gradient {
+    background: linear-gradient(135deg, #5eeeb5, #34d99a, #22c97d);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  /* ---- Orb Decorators ---- */
-  .orb {
-    @apply absolute pointer-events-none rounded-full blur-3xl;
+  /* ── Number stat ── */
+  .number-stat {
+    @apply font-display font-extrabold;
+    color: #f0f0f3;
   }
 
-  /* ---- Progress Bar ---- */
+  /* ── Progress bar ── */
   .progress-track {
     @apply h-1 w-full rounded-full overflow-hidden;
-    background: rgba(52,232,161,0.12);
+    background: #1e2028;
   }
 
   .progress-fill {
     @apply h-full rounded-full;
-    background: linear-gradient(90deg, #34e8a1, #1fc87d);
-    box-shadow: 0 0 12px rgba(52,232,161,0.5);
+    background: linear-gradient(90deg, #34d99a, #22c97d);
   }
 }
 
-/* ===========================
+/* ═══════════════════════════════════
    UTILITIES
-=========================== */
+═══════════════════════════════════ */
 @layer utilities {
-  .text-gradient {
-    background: linear-gradient(135deg, #5fffc0 0%, #34e8a1 40%, #1fc87d 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  .border-subtle  { border-color: #1e2028; }
+  .border-medium  { border-color: #2a2c36; }
+
+  .bg-surface     { background: #16171e; }
+  .bg-elevated    { background: #1e2028; }
+
+  /* Subtle dot pattern (not loud) */
+  .dot-grid {
+    background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 32px 32px;
   }
+}
 
-  .text-gradient-soft {
-    background: linear-gradient(135deg, #e2f5ec 0%, #b0e6cc 60%, #34e8a1 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+/* ═══════════════════════════════════
+   SOCIAL ICONS — Animated Tooltips
+═══════════════════════════════════ */
+.social-icons {
+  display: inline-flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 6px;
+}
 
-  .bg-panel-gradient {
-    background: linear-gradient(145deg, #0d2e1c 0%, #081f12 100%);
-  }
+.social-icons .s-icon {
+  position: relative;
+  background: #16171e;
+  border: 1px solid #1e2028;
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  cursor: pointer;
+  color: #6b6f80;
+  transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
 
-  .border-mint-subtle  { border-color: rgba(52,232,161,0.15); }
-  .border-mint-medium  { border-color: rgba(52,232,161,0.3); }
-  .border-mint-strong  { border-color: rgba(52,232,161,0.55); }
+.social-icons .s-tooltip {
+  position: absolute;
+  top: 0;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  background: #16171e;
+  color: #b0b3c0;
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid #1e2028;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
 
-  .shadow-glow-mint { box-shadow: 0 0 40px rgba(52,232,161,0.3); }
-  .ring-mint        { box-shadow: 0 0 0 1px rgba(52,232,161,0.35); }
+.social-icons .s-tooltip::before {
+  position: absolute;
+  content: "";
+  height: 8px;
+  width: 8px;
+  background: #16171e;
+  border-right: 1px solid #1e2028;
+  border-bottom: 1px solid #1e2028;
+  bottom: -5px;
+  left: 50%;
+  transform: translate(-50%) rotate(45deg);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
 
-  /* grid dots background pattern */
-  .grid-dots {
-    background-image:
-      radial-gradient(circle, rgba(52,232,161,0.15) 1px, transparent 1px);
-    background-size: 28px 28px;
-  }
+.social-icons .s-icon:hover .s-tooltip {
+  top: -42px;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
 
-  /* line grid */
-  .grid-lines {
-    background-image:
-      linear-gradient(rgba(52,232,161,0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(52,232,161,0.05) 1px, transparent 1px);
-    background-size: 40px 40px;
-  }
+.social-icons .s-icon:hover span,
+.social-icons .s-icon:hover .s-tooltip {
+  text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.15);
+}
 
-  /* Noise overlay */
-  .noise::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none;
-    opacity: 0.04;
-  }
+/* Gmail (replaced Facebook) */
+.social-icons .gmail:hover,
+.social-icons .gmail:hover .s-tooltip,
+.social-icons .gmail:hover .s-tooltip::before {
+  background: #ea4335;
+  border-color: #ea4335;
+  color: #fff;
+}
 
-  .animation-delay-200 { animation-delay: 200ms; }
-  .animation-delay-400 { animation-delay: 400ms; }
-  .animation-delay-600 { animation-delay: 600ms; }
-  .animation-delay-800 { animation-delay: 800ms; }
+/* Twitter / X */
+.social-icons .twitter:hover,
+.social-icons .twitter:hover .s-tooltip,
+.social-icons .twitter:hover .s-tooltip::before {
+  background: #1da1f2;
+  border-color: #1da1f2;
+  color: #fff;
+}
+
+/* Instagram */
+.social-icons .instagram:hover,
+.social-icons .instagram:hover .s-tooltip,
+.social-icons .instagram:hover .s-tooltip::before {
+  background: #e4405f;
+  border-color: #e4405f;
+  color: #fff;
+}
+
+/* LinkedIn */
+.social-icons .linkedin:hover,
+.social-icons .linkedin:hover .s-tooltip,
+.social-icons .linkedin:hover .s-tooltip::before {
+  background: #0a66c2;
+  border-color: #0a66c2;
+  color: #fff;
+}
+
+/* GitHub */
+.social-icons .github:hover,
+.social-icons .github:hover .s-tooltip,
+.social-icons .github:hover .s-tooltip::before {
+  background: #333;
+  border-color: #333;
+  color: #fff;
 }

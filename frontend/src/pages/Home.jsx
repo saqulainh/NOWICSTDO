@@ -4,7 +4,10 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight, Github, ArrowRight, CheckCircle2 } from 'lucide-react';
 import SectionHeading from '../components/SectionHeading';
 import ScrollReveal from '../components/ScrollReveal';
-import BrandLogo from '../components/BrandLogo';
+import MagnifierText from '../components/MagnifierText';
+import FloatingChips from '../components/FloatingChips';
+import ParticleHero from '../components/ParticleHero';
+import BrandTitle from '../components/BrandTitle';
 import { services, highlights, whyUs, portfolioItems } from '../data/content';
 
 /* ── Counter hook ── */
@@ -50,148 +53,93 @@ export default function Home() {
   return (
     <>
       {/* ═══ HERO ═══ */}
-      <section className="relative overflow-hidden">
-        {/* Subtle top glow — only accent */}
-        <div
-          className="pointer-events-none absolute inset-x-0 -top-40 h-[500px]"
-          style={{
-            background: 'radial-gradient(ellipse 60% 40% at 50% 0%, rgba(52,217,154,0.08) 0%, transparent 70%)',
-          }}
-        />
+      <section className="relative overflow-hidden" style={{ minHeight: '700px' }}>
+        {/* Particle canvas + spotlights + grid lines (background layer) */}
+        <ParticleHero />
 
-        <div className="container-shell relative pt-20 pb-24 lg:pt-28 lg:pb-32">
-          <div className="grid items-center gap-16 lg:grid-cols-[1.15fr_0.85fr]">
+        {/* Floating tech chips — decorative background */}
+        <FloatingChips />
 
-            {/* Left copy */}
-            <div>
-              <motion.p
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-                className="eyebrow"
-              >
-                AI-Powered Software Agency
-              </motion.p>
+        <div className="container-shell relative z-10 flex flex-col items-center justify-center text-center pt-28 pb-28 lg:pt-36 lg:pb-36">
 
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.06 }}
-                className="mt-5 font-display text-5xl font-extrabold leading-[1.05] tracking-tight text-text sm:text-6xl lg:text-[68px]"
-              >
-                From{' '}
-                <span className="text-gradient">Vision</span>
-                <br />
-                to Version.
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.45, delay: 0.14 }}
-                className="mt-6 max-w-lg text-lg leading-relaxed text-sub"
-              >
-                We build <strong className="font-semibold text-text">MVPs, AI web apps, business websites</strong>{' '}
-                and <strong className="font-semibold text-text">dashboards</strong> — shipped in days, not months.
-              </motion.p>
-
-              <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.22 }}
-                className="mt-8 flex flex-wrap items-center gap-3"
-              >
-                <Link to="/contact" className="cta-btn">
-                  Launch Your Project <ArrowRight size={15} className="ml-2" />
-                </Link>
-                <Link to="/portfolio" className="outline-btn">
-                  View Our Work
-                </Link>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
-                className="mt-8 flex flex-wrap gap-5"
-              >
-                {['30+ Projects', '98% Satisfaction', 'India Based'].map((b) => (
-                  <span key={b} className="flex items-center gap-2 text-xs text-muted">
-                    <CheckCircle2 size={12} className="text-mint" />
-                    {b}
-                  </span>
-                ))}
-              </motion.div>
-            </div>
-
-            {/* Right — Dashboard preview card */}
-            <motion.div
-              initial={{ opacity: 0, y: 24, scale: 0.97 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.3 }}
+              className="eyebrow"
             >
-              <div className="card overflow-hidden p-5">
-                {/* Logo */}
-                <div className="mb-5 flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-surface">
-                    <BrandLogo variant="full" className="h-10 w-10" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-text">Project Dashboard</p>
-                    <p className="text-xs text-muted">Live Preview</p>
-                  </div>
-                </div>
+              AI-Powered Software Agency
+            </motion.p>
 
-                {/* Sprint row */}
-                <div className="grid grid-cols-3 gap-2.5 mb-4">
-                  {[
-                    { label: 'Sprint 01', val: 'UI + API' },
-                    { label: 'Sprint 02', val: 'AI Layer' },
-                    { label: 'Sprint 03', val: 'Launch 🚀' },
-                  ].map((c, i) => (
-                    <motion.div
-                      key={c.label}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.5 + i * 0.08 }}
-                      className="rounded-xl bg-surface p-3 text-center"
-                    >
-                      <p className="text-[10px] uppercase tracking-widest text-muted">{c.label}</p>
-                      <p className="mt-0.5 text-xs font-semibold text-text">{c.val}</p>
-                    </motion.div>
-                  ))}
-                </div>
+            <BrandTitle className="mt-5 text-6xl sm:text-7xl lg:text-[88px]" />
 
-                {/* Score */}
-                <div className="rounded-xl bg-surface p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <p className="text-xs text-muted">Execution Score</p>
-                    <p className="font-display text-xl font-bold text-gradient">98%</p>
-                  </div>
-                  <div className="progress-track">
-                    <motion.div
-                      className="progress-fill"
-                      initial={{ width: 0 }}
-                      animate={{ width: '98%' }}
-                      transition={{ delay: 0.7, duration: 1, ease: 'easeOut' }}
-                    />
-                  </div>
-                </div>
+            {/* Tagline — styled subtitle */}
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: 0.65 }}
+              className="mt-4 font-display text-xl font-medium tracking-wide sm:text-2xl"
+              style={{
+                background: 'linear-gradient(90deg, #5eeeb5, #34d99a, #22c97d)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+            >
+              From Vision to Version.
+            </motion.p>
 
-                {/* Status */}
-                <div className="mt-3 flex items-center justify-between px-1">
-                  <span className="flex items-center gap-2 text-xs text-muted">
-                    <span className="relative flex h-2 w-2">
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-mint opacity-60" />
-                      <span className="relative inline-flex h-2 w-2 rounded-full bg-mint" />
-                    </span>
-                    Active Project
-                  </span>
-                  <span className="text-xs font-medium text-mint">Online</span>
-                </div>
-              </div>
+            {/* Thin divider */}
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.6, delay: 0.8 }}
+              className="mt-5 h-px w-24"
+              style={{ background: 'linear-gradient(90deg, transparent, rgba(52,217,154,0.5), transparent)' }}
+            />
+
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: 0.85 }}
+              className="mt-5 max-w-xl text-base leading-relaxed text-sub sm:text-lg"
+            >
+              <MagnifierText
+                text="We build MVPs, AI web apps, business websites and dashboards — shipped in days, not months."
+                highlightWords={['MVPs,', 'AI', 'web', 'apps,']}
+                radius={80}
+                maxScale={1.3}
+                className="justify-center"
+              />
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.9 }}
+              className="mt-10 flex flex-wrap items-center justify-center gap-4"
+            >
+              <Link to="/contact" className="cta-btn">
+                Launch Your Project <ArrowRight size={15} className="ml-2" />
+              </Link>
+              <Link to="/portfolio" className="outline-btn">
+                View Our Work
+              </Link>
             </motion.div>
-          </div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 1.1 }}
+              className="mt-8 flex flex-wrap justify-center gap-5"
+            >
+              {['30+ Projects', '98% Satisfaction', 'India Based'].map((b) => (
+                <span key={b} className="flex items-center gap-2 text-xs text-muted">
+                  <CheckCircle2 size={12} className="text-mint" />
+                  {b}
+                </span>
+              ))}
+            </motion.div>
         </div>
       </section>
 

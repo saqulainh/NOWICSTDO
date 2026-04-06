@@ -103,61 +103,73 @@ export default function Contact() {
 
           {/* Right — Form */}
           <ScrollReveal delay={0.05}>
-            <div className="card p-7">
-              {!sent ? (
-                <>
-                  <h3 className="font-display text-xl font-bold text-text">Start a Project</h3>
-                  <p className="mt-1.5 text-sm text-sub">We'll respond within 24 hours.</p>
-
-                  <form onSubmit={handleSubmit} className="mt-6 grid gap-3.5" id="contact-form">
-                    <div className="grid gap-3.5 sm:grid-cols-2">
+            {!sent ? (
+              <div className="grid gap-0 w-full lg:max-w-[400px] mx-auto lg:ml-auto mb-4">
+                {/* Cart Form */}
+                <div className="card bg-[#0e0f14] !rounded-b-none border-b-0 shadow-2xl relative z-10">
+                  <label className="relative flex items-center px-5 h-[40px] border-b border-[#34d99a]/40 font-bold text-[11px] text-[#f0f0f3] uppercase w-full">
+                    START A PROJECT
+                  </label>
+                  <div className="flex flex-col p-5">
+                    <form onSubmit={handleSubmit} id="contact-form" className="grid gap-3 p-1">
                       <div>
-                        <label className="mb-1 block text-xs font-medium uppercase tracking-[0.15em] text-muted">Name *</label>
-                        <input id="contact-name" name="name" required value={form.name} onChange={handleChange} placeholder="John Doe" className="field" />
+                        <span className="block text-[13px] font-semibold text-[#f0f0f3] mb-2 uppercase">Contact Info</span>
+                        <div className="grid gap-2">
+                          <input id="contact-name" name="name" required value={form.name} onChange={handleChange} placeholder="Name" className="field !py-2 !h-[36px] !px-3 !text-[12px] bg-[#16171e] focus:bg-[#1e2028]" />
+                          <input id="contact-email" name="email" type="email" required value={form.email} onChange={handleChange} placeholder="Email" className="field !py-2 !h-[36px] !px-3 !text-[12px] bg-[#16171e] focus:bg-[#1e2028]" />
+                        </div>
                       </div>
+                      
+                      <hr className="h-px bg-[#34d99a]/30 border-none my-1" />
+                      
                       <div>
-                        <label className="mb-1 block text-xs font-medium uppercase tracking-[0.15em] text-muted">Email *</label>
-                        <input id="contact-email" name="email" type="email" required value={form.email} onChange={handleChange} placeholder="john@company.com" className="field" />
+                        <span className="block text-[13px] font-semibold text-[#f0f0f3] mb-2 uppercase">Project Type</span>
+                        <select id="contact-type" name="type" required value={form.type} onChange={handleChange} className="field !py-0 !h-[36px] !px-3 !text-[12px] !cursor-pointer bg-[#16171e] focus:bg-[#1e2028]">
+                          <option value="" disabled>Select type...</option>
+                          {projectTypes.map((pt) => (
+                            <option key={pt} value={pt} style={{ background: '#0e0f14', color: '#f0f0f3' }}>{pt}</option>
+                          ))}
+                        </select>
                       </div>
-                    </div>
 
-                    <div>
-                      <label className="mb-1 block text-xs font-medium uppercase tracking-[0.15em] text-muted">Project Type</label>
-                      <select id="contact-type" name="type" value={form.type} onChange={handleChange} className="field" style={{ cursor: 'pointer' }}>
-                        <option value="" disabled>Select type...</option>
-                        {projectTypes.map((pt) => (
-                          <option key={pt} value={pt} style={{ background: '#0e0f14', color: '#f0f0f3' }}>{pt}</option>
-                        ))}
-                      </select>
-                    </div>
+                      <hr className="h-px bg-[#34d99a]/30 border-none my-1" />
+                      
+                      <div>
+                        <span className="block text-[13px] font-semibold text-[#f0f0f3] mb-2 uppercase">Details</span>
+                        <textarea id="contact-message" name="message" required rows={3} value={form.message} onChange={handleChange} placeholder="Describe your idea..." className="field resize-none !py-2 !px-3 !text-[12px] bg-[#16171e] focus:bg-[#1e2028]" />
+                      </div>
+                    </form>
+                  </div>
+                </div>
 
-                    <div>
-                      <label className="mb-1 block text-xs font-medium uppercase tracking-[0.15em] text-muted">Project Details *</label>
-                      <textarea id="contact-message" name="message" required rows={5} value={form.message} onChange={handleChange} placeholder="Describe your idea, goals, and timeline..." className="field resize-none" />
-                    </div>
-
-                    <motion.button
+                {/* Checkout Footer */}
+                <div className="card bg-[#0e0f14] !rounded-t-none border-t border-[#34d99a]/40 shadow-2xl overflow-hidden relative z-0">
+                  <div className="flex items-center justify-between py-2.5 px-2.5 pl-5 bg-[#34d99a]/10">
+                    <label className="relative text-[22px] text-[#f0f0f3] font-black tracking-tight">Ready?</label>
+                    <motion.button 
+                      form="contact-form" 
                       type="submit"
-                      id="contact-submit"
-                      whileHover={{ scale: 1.01 }}
-                      whileTap={{ scale: 0.99 }}
-                      className="cta-btn mt-1 w-fit"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="flex flex-row justify-center items-center w-[140px] h-[36px] bg-[#34d99a]/20 shadow-[0_0.5px_0.5px_rgba(52,217,154,0.3),0_1px_0.5px_rgba(52,217,154,0.3)] rounded-[7px] border border-[#34d99a] text-[#34d99a] text-[13px] font-semibold transition-all hover:bg-[#34d99a]/30"
                     >
-                      Send Inquiry <Send size={14} className="ml-2" />
+                      Send Message
                     </motion.button>
-                  </form>
-                </>
-              ) : (
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="card p-7 w-full lg:max-w-[400px] mx-auto lg:ml-auto">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.96 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="flex flex-col items-center py-14 text-center"
+                  className="flex flex-col items-center py-8 text-center"
                 >
-                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-mint/10">
-                    <CheckCircle2 size={32} className="text-mint" />
+                  <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#34d99a]/10">
+                    <CheckCircle2 size={32} className="text-[#34d99a]" />
                   </div>
-                  <h3 className="mt-5 font-display text-xl font-bold text-text">Sent! 🎉</h3>
-                  <p className="mt-2 max-w-sm text-sm text-sub">
+                  <h3 className="mt-5 font-display text-xl font-bold text-[#f0f0f3]">Sent! 🎉</h3>
+                  <p className="mt-2 text-sm text-[#b0b3c0]">
                     We'll review your project and get back within 24 hours.
                   </p>
                   <button
@@ -167,8 +179,8 @@ export default function Contact() {
                     Send Another
                   </button>
                 </motion.div>
-              )}
-            </div>
+              </div>
+            )}
           </ScrollReveal>
         </div>
       </section>

@@ -6,7 +6,7 @@ import SectionHeading from '../components/SectionHeading';
 import ScrollReveal from '../components/ScrollReveal';
 import MagnifierText from '../components/MagnifierText';
 import FloatingChips from '../components/FloatingChips';
-import ParticleHero from '../components/ParticleHero';
+import HeroDecor from '../components/HeroDecor';
 import BrandTitle from '../components/BrandTitle';
 import { services, highlights, whyUs, portfolioItems } from '../data/content';
 
@@ -54,10 +54,10 @@ export default function Home() {
     <>
       {/* ═══ HERO ═══ */}
       <section className="relative overflow-hidden" style={{ minHeight: '700px' }}>
-        {/* Particle canvas + spotlights + grid lines (background layer) */}
-        <ParticleHero />
+        {/* Spotlight beams + grid lines (local to Hero) */}
+        <HeroDecor />
 
-        {/* Floating tech chips — decorative background */}
+        {/* Floating tech chips */}
         <FloatingChips />
 
         <div className="container-shell relative z-10 flex flex-col items-center justify-center text-center pt-28 pb-28 lg:pt-36 lg:pb-36">

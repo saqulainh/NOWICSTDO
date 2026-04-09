@@ -107,10 +107,10 @@ export default function Services() {
           />
           <div className="mt-12 grid gap-1 md:grid-cols-4">
             {[
-              { step: '01', title: 'Discovery',     desc: 'Understand goals, users, and constraints.' },
-              { step: '02', title: 'Architecture',   desc: 'Design system, stack, and project roadmap.' },
-              { step: '03', title: 'Build',          desc: 'Sprint through dev with weekly demos.' },
-              { step: '04', title: 'Launch',         desc: 'Deploy, test, and hand over with docs.' },
+              { step: '01', title: 'Discovery', desc: 'Understand goals, users, and constraints.' },
+              { step: '02', title: 'Architecture', desc: 'Design system, stack, and project roadmap.' },
+              { step: '03', title: 'Build', desc: 'Sprint through dev with weekly demos.' },
+              { step: '04', title: 'Launch', desc: 'Deploy, test, and hand over with docs.' },
             ].map((p, i) => (
               <ScrollReveal key={p.step} delay={i * 0.08}>
                 <div className="p-5">

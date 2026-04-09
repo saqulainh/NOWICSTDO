@@ -38,10 +38,10 @@ export default function ParticleHero({ className = '' }) {
         }
       },
       draw(ctx) {
-        // Mint / teal / cyan particles matching #34d99a palette
-        const r = 52 + Math.floor(Math.random() * 40);
-        const g = 200 + Math.floor(Math.random() * 55);
-        const b = 154 + Math.floor(Math.random() * 80);
+        // Muted Light Green / Off-road Green particles matching #bddfbc palette
+        const r = 160 + Math.floor(Math.random() * 40);
+        const g = 190 + Math.floor(Math.random() * 40);
+        const b = 160 + Math.floor(Math.random() * 40);
         ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.opacity * 0.7})`;
         ctx.fillRect(this.x, this.y, 0.5, Math.random() * 2 + 1);
       },
@@ -84,36 +84,11 @@ export default function ParticleHero({ className = '' }) {
 
   return (
     <div
-      className={`particle-hero-wrap pointer-events-none absolute inset-0 overflow-hidden ${className}`}
+      className={`particle-hero-wrap pointer-events-none fixed inset-0 w-full h-full overflow-hidden ${className}`}
       aria-hidden
-      style={{ zIndex: 0 }}
+      style={{ zIndex: -10 }}
     >
-      {/* Spotlight beams */}
-      <div className="particle-spotlights">
-        <div className="particle-beam particle-beam--left" />
-        <div className="particle-beam particle-beam--right" />
-        <div className="particle-beam particle-beam--center" />
-      </div>
-
-      {/* Accent grid lines */}
-      <div className="particle-grid-lines">
-        {[14, 22, 30, 40, 52].map((t) => (
-          <div
-            key={t}
-            className="particle-hline"
-            style={{ top: `${t}%` }}
-          />
-        ))}
-        {[-18, -8, 8, 18].map((l, i) => (
-          <div
-            key={i}
-            className="particle-vline"
-            style={{ left: `calc(50% + ${l}%)` }}
-          />
-        ))}
-      </div>
-
-      {/* Canvas */}
+      {/* Star Field Canvas Only */}
       <canvas
         ref={canvasRef}
         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 1 }}

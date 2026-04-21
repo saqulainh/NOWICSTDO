@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { Lock, Eye, EyeOff } from 'lucide-react';
@@ -11,18 +11,18 @@ export default function AdminLogin() {
     const { login, isLoggedIn } = useAdminAuth();
     const navigate = useNavigate();
 
-    if (isLoggedIn) {
-        navigate('/admin', { replace: true });
-        return null;
-    }
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate('/admin', { replace: true });
+        }
+    }, [isLoggedIn, navigate]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-        const ok = login(username, password);
-        if (ok) {
-            navigate('/admin', { replace: true });
-        } else {
+        try {
+            await login(username, password);
+        } catch {
             setError('Invalid username or password');
         }
     };
@@ -48,8 +48,9 @@ export default function AdminLogin() {
                     )}
 
                     <div>
-                        <label className="block text-xs font-semibold uppercase tracking-wider text-[#6b6f80] mb-2">Username</label>
+                        <label htmlFor="admin-username" className="block text-xs font-semibold uppercase tracking-wider text-[#6b6f80] mb-2">Username</label>
                         <input
+                            id="admin-username"
                             type="text"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
@@ -61,9 +62,10 @@ export default function AdminLogin() {
                     </div>
 
                     <div>
-                        <label className="block text-xs font-semibold uppercase tracking-wider text-[#6b6f80] mb-2">Password</label>
+                        <label htmlFor="admin-password" className="block text-xs font-semibold uppercase tracking-wider text-[#6b6f80] mb-2">Password</label>
                         <div className="relative">
                             <input
+                                id="admin-password"
                                 type={showPw ? 'text' : 'password'}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
@@ -74,6 +76,8 @@ export default function AdminLogin() {
                             <button
                                 type="button"
                                 onClick={() => setShowPw(!showPw)}
+                                aria-label={showPw ? 'Hide password' : 'Show password'}
+                                aria-pressed={showPw}
                                 className="absolute right-3 top-1/2 -translate-y-1/2 text-[#6b6f80] hover:text-[#e0e0e8] transition-colors"
                             >
                                 {showPw ? <EyeOff size={16} /> : <Eye size={16} />}

@@ -20,8 +20,9 @@ export default function AdminLayout() {
 
     if (loading) {
         return (
-            <div className="flex h-screen items-center justify-center bg-[#0a0b0f]">
+            <div className="flex h-screen items-center justify-center bg-[#0a0b0f]" role="status" aria-live="polite">
                 <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#34d99a] border-t-transparent" />
+                <span className="sr-only">Loading...</span>
             </div>
         );
     }

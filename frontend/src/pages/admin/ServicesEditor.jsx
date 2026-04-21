@@ -21,17 +21,31 @@ export default function ServicesEditor() {
     const [saved, setSaved] = useState(false);
 
     useEffect(() => {
-        fetchSection('services').then((data) => {
-            if (data) setItems(data);
-            else {
-                // Convert defaults to serializable (icon name instead of component)
-                setItems(defaultServices.map((s) => ({
-                    ...s,
-                    icon: s.icon?.displayName || s.icon?.name || 'Rocket',
-                })));
+        let mounted = true;
+
+        const normalize = (list) => (list || []).map((s) => ({
+            ...s,
+            icon: s.icon?.displayName || s.icon?.name || s.icon || 'Rocket',
+        }));
+
+        (async () => {
+            try {
+                const data = await fetchSection('services');
+                if (mounted) {
+                    setItems(normalize(data || defaultServices));
+                }
+            } catch (err) {
+                console.error('Failed to load services:', err);
+                if (mounted) {
+                    setItems(normalize(defaultServices));
+                }
             }
-        });
-    }, []);
+        })();
+
+        return () => {
+            mounted = false;
+        };
+    }, [defaultServices]);
 
     const update = (idx, field, value) => {
         setItems((prev) => prev.map((item, i) => i === idx ? { ...item, [field]: value } : item));
@@ -49,14 +63,16 @@ export default function ServicesEditor() {
     };
 
     const addFeature = (idx) => {
-        setItems((prev) => prev.map((item, i) => i === idx ? { ...item, features: [...item.features, ''] } : item));
+        setItems((prev) => prev.map((item, i) => i === idx ? { ...item, features: [...item.features, ''], saved: false } : item));
+        setSaved(false);
     };
 
     const removeFeature = (idx, fIdx) => {
         setItems((prev) => prev.map((item, i) => {
             if (i !== idx) return item;
-            return { ...item, features: item.features.filter((_, j) => j !== fIdx) };
+            return { ...item, features: item.features.filter((_, j) => j !== fIdx), saved: false };
         }));
+        setSaved(false);
     };
 
     const addItem = () => setItems((prev) => [...prev, { ...emptyService, features: ['', '', ''] }]);

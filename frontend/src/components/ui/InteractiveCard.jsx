@@ -10,7 +10,7 @@ export default function InteractiveCard({
 }) {
   return (
     <div className={`perspective-[1000px] ${containerClassName}`}>
-      <div className={`card relative overflow-hidden ${className}`}>
+      <div className={`card group/inter relative overflow-hidden ${className}`}>
         <div className="relative z-20 h-full">
           {children}
         </div>

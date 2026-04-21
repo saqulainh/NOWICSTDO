@@ -89,7 +89,7 @@ export default function Services() {
                   <Magnetic strength={0.2}>
                     <Link
                       to="/contact"
-                      className="mt-8 flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-mint opacity-0 group-hover/inter:opacity-100 transition-all duration-300"
+                      className="mt-8 flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-mint opacity-0 transition-all duration-300 group-hover/inter:opacity-100 group-focus-within/inter:opacity-100 focus:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-mint/40 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0e0f14]"
                     >
                       Start Project <ArrowRight size={14} />
                     </Link>

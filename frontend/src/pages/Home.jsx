@@ -53,7 +53,7 @@ function StatCard({ item, index }) {
 }
 
 export default function Home() {
-  const { services, highlights, whyUs, portfolioItems } = useContent();
+  const { services = [], highlights = [], whyUs = [], portfolioItems = [] } = useContent() || {};
 
   return (
     <>
@@ -169,7 +169,7 @@ export default function Home() {
                   <p className="mt-2 text-sm leading-relaxed text-sub">{service.description}</p>
 
                   <ul className="mt-4 space-y-1.5">
-                    {service.features.map((f) => (
+                    {(service.features || []).map((f) => (
                       <li key={f} className="flex items-center gap-2 text-xs text-muted">
                         <CheckCircle2 size={11} className="text-mint shrink-0" />
                         {f}
@@ -252,22 +252,26 @@ export default function Home() {
                   <p className="mt-2 text-sm leading-relaxed text-sub">{item.description}</p>
 
                   <div className="mt-4 flex flex-wrap gap-1.5">
-                    {item.tags.map((tag) => (
+                    {(item.tags || []).map((tag) => (
                       <span key={tag} className="tag bg-white/5">{tag}</span>
                     ))}
                   </div>
 
                   <div className="mt-6 flex gap-3">
-                    <Magnetic strength={0.2}>
-                      <a href="#" className="portfolio-btn text-xs">
-                        Live Demo <ArrowUpRight size={12} className="ml-1" />
-                      </a>
-                    </Magnetic>
-                    <Magnetic strength={0.2}>
-                      <a href="#" className="portfolio-btn text-xs">
-                        GitHub <Github size={12} className="ml-1" />
-                      </a>
-                    </Magnetic>
+                    {item.demoUrl && (
+                      <Magnetic strength={0.2}>
+                        <a href={item.demoUrl} className="portfolio-btn text-xs" target="_blank" rel="noopener noreferrer">
+                          Live Demo <ArrowUpRight size={12} className="ml-1" />
+                        </a>
+                      </Magnetic>
+                    )}
+                    {item.githubUrl && (
+                      <Magnetic strength={0.2}>
+                        <a href={item.githubUrl} className="portfolio-btn text-xs" target="_blank" rel="noopener noreferrer">
+                          GitHub <Github size={12} className="ml-1" />
+                        </a>
+                      </Magnetic>
+                    )}
                   </div>
                 </div>
               </InteractiveCard>

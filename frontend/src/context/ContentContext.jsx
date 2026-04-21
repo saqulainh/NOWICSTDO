@@ -60,18 +60,19 @@ export function ContentProvider({ children }) {
                 return;
             }
 
-            const merged = { ...content };
-            data.forEach((row) => {
-                if (row.section && row.data !== undefined) {
-                    let val = row.data;
-                    // Resolve icons for sections that have them
-                    if (['services', 'stats', 'highlights', 'whyUs'].includes(row.section)) {
-                        val = attachIcons(val);
+            setContent((prev) => {
+                const merged = { ...prev };
+                data.forEach((row) => {
+                    if (row.section && row.data !== undefined) {
+                        let val = row.data;
+                        if (['services', 'stats', 'highlights', 'whyUs'].includes(row.section)) {
+                            val = attachIcons(val);
+                        }
+                        merged[row.section] = val;
                     }
-                    merged[row.section] = val;
-                }
+                });
+                return merged;
             });
-            setContent(merged);
         } catch (err) {
             console.warn('CMS fetch failed, using defaults:', err.message);
         } finally {

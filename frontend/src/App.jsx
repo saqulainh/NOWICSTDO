@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import SmoothScroll from './components/common/SmoothScroll';
 import MainLayout from './layouts/MainLayout';
+import NotFound, { AdminNotFound } from './pages/NotFound';
 
 /* Admin */
 import AdminLayout from './layouts/AdminLayout';
@@ -37,6 +38,7 @@ export default function App() {
             <Route path="/portfolio" element={<Portfolio />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
 
           {/* Admin CMS */}
@@ -49,6 +51,7 @@ export default function App() {
             <Route path="stats" element={<StatsEditor />} />
             <Route path="about" element={<AboutEditor />} />
             <Route path="faqs" element={<FAQEditor />} />
+            <Route path="*" element={<AdminNotFound />} />
           </Route>
         </Routes>
       </Suspense>

@@ -154,7 +154,7 @@ export default function About() {
               <ul className="space-y-3">
                 {teamValues.map((v, i) => (
                   <motion.li
-                    key={v}
+                    key={typeof v === 'string' ? v : v.id || v.text}
                     initial={{ opacity: 0, x: 16 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
@@ -162,7 +162,7 @@ export default function About() {
                     className="flex items-center gap-3"
                   >
                     <CheckCircle2 size={16} className="shrink-0 text-mint" />
-                    <span className="text-sm font-medium text-text">{v}</span>
+                    <span className="text-sm font-medium text-text">{typeof v === 'string' ? v : v.text}</span>
                   </motion.li>
                 ))}
               </ul>

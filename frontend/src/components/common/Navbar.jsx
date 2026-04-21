@@ -87,6 +87,7 @@ export default function Navbar() {
             id="mobile-menu-toggle"
             onClick={() => setOpen((v) => !v)}
             aria-label="Toggle menu"
+            aria-expanded={open}
             className="flex h-9 w-9 items-center justify-center rounded-lg border border-subtle text-sub md:hidden"
           >
             {open ? <X size={16} /> : <Menu size={16} />}

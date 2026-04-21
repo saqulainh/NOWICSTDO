@@ -24,10 +24,10 @@ export default function Dashboard() {
             {/* Quick stats */}
             <div className="mb-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
                 {[
-                    { label: 'Services', value: content.services?.length || 0 },
-                    { label: 'Portfolio', value: content.portfolioItems?.length || 0 },
-                    { label: 'FAQs', value: content.faqs?.length || 0 },
-                    { label: 'Values', value: content.teamValues?.length || 0 },
+                    { label: 'Services', value: content?.services?.length || 0 },
+                    { label: 'Portfolio', value: content?.portfolioItems?.length || 0 },
+                    { label: 'FAQs', value: content?.faqs?.length || 0 },
+                    { label: 'Values', value: content?.teamValues?.length || 0 },
                 ].map((s) => (
                     <div key={s.label} className="rounded-xl border border-[#1e2028] bg-[#0e0f14] p-4 text-center">
                         <p className="text-2xl font-bold text-[#34d99a]">{s.value}</p>

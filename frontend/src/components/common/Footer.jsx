@@ -46,6 +46,24 @@ function GithubIcon() {
   );
 }
 
+function SocialLink({ href, label, className, children }) {
+  const baseClassName = `inline-flex h-full w-full items-center justify-center rounded-full bg-transparent p-0 text-inherit border-0 ${className || ''}`.trim();
+
+  if (href) {
+    return (
+      <a href={href} aria-label={label} target="_blank" rel="noopener noreferrer" className={baseClassName}>
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <button type="button" aria-label={label} className={baseClassName}>
+      {children}
+    </button>
+  );
+}
+
 export default function Footer() {
   const content = useContent();
   const brand = content.brand || defaultBrand;
@@ -78,27 +96,27 @@ export default function Footer() {
               </li>
               <li className="s-icon twitter">
                 <span className="s-tooltip">Twitter</span>
-                <a href="#" aria-label="Twitter">
+                <SocialLink href={brand.twitter} label="Twitter" className="social-icon-link">
                   <TwitterIcon />
-                </a>
+                </SocialLink>
               </li>
               <li className="s-icon instagram">
                 <span className="s-tooltip">Instagram</span>
-                <a href="#" aria-label="Instagram">
+                <SocialLink href={brand.instagram} label="Instagram" className="social-icon-link">
                   <InstagramIcon />
-                </a>
+                </SocialLink>
               </li>
               <li className="s-icon linkedin">
                 <span className="s-tooltip">LinkedIn</span>
-                <a href="#" aria-label="LinkedIn">
+                <SocialLink href={brand.linkedin} label="LinkedIn" className="social-icon-link">
                   <LinkedInIcon />
-                </a>
+                </SocialLink>
               </li>
               <li className="s-icon github">
                 <span className="s-tooltip">GitHub</span>
-                <a href="#" aria-label="GitHub">
+                <SocialLink href={brand.github} label="GitHub" className="social-icon-link">
                   <GithubIcon />
-                </a>
+                </SocialLink>
               </li>
             </ul>
           </div>

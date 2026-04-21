@@ -15,15 +15,17 @@ export default function SmoothScroll({ children }) {
       infinite: false,
     });
 
+    let rafId = 0;
+
     function raf(time) {
+      rafId = requestAnimationFrame(raf);
       lenis.raf(time);
-      requestAnimationFrame(raf);
     }
 
-    requestAnimationFrame(raf);
+    rafId = requestAnimationFrame(raf);
 
-    // Stop Lenis when taking over via other animations if necessary, otherwise just return destroy
     return () => {
+      cancelAnimationFrame(rafId);
       lenis.destroy();
     };
   }, []);

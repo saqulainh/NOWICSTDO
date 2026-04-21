@@ -2,37 +2,70 @@ import { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext(null);
 
-const ADMIN_USER = 'admin';
-const ADMIN_PASS = 'NowicAdmin@2026';
-const STORAGE_KEY = 'nowic_admin_auth';
+async function adminRequest(path, options = {}) {
+    const response = await fetch(`/api/admin${path}`, {
+        credentials: 'include',
+        headers: {
+            'Content-Type': 'application/json',
+            ...(options.headers || {}),
+        },
+        ...options,
+    });
+
+    const payload = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+        throw new Error(payload?.message || 'Admin auth request failed');
+    }
+
+    return payload;
+}
 
 export function AdminAuthProvider({ children }) {
     const [admin, setAdmin] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
+        let mounted = true;
+
+        (async () => {
             try {
-                setAdmin(JSON.parse(saved));
-            } catch { /* ignore */ }
-        }
-        setLoading(false);
+                const data = await adminRequest('/session', { method: 'GET' });
+                if (mounted) {
+                    setAdmin(data.admin || null);
+                }
+            } catch {
+                if (mounted) {
+                    setAdmin(null);
+                }
+            } finally {
+                if (mounted) {
+                    setLoading(false);
+                }
+            }
+        })();
+
+        return () => {
+            mounted = false;
+        };
     }, []);
 
-    const login = (username, password) => {
-        if (username === ADMIN_USER && password === ADMIN_PASS) {
-            const session = { username, loggedInAt: Date.now() };
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
-            setAdmin(session);
-            return true;
-        }
-        return false;
+    const login = async (username, password) => {
+        const data = await adminRequest('/login', {
+            method: 'POST',
+            body: JSON.stringify({ username, password }),
+        });
+
+        setAdmin(data.admin || null);
+        return true;
     };
 
-    const logout = () => {
-        localStorage.removeItem(STORAGE_KEY);
-        setAdmin(null);
+    const logout = async () => {
+        try {
+            await adminRequest('/logout', { method: 'POST' });
+        } finally {
+            setAdmin(null);
+        }
     };
 
     return (

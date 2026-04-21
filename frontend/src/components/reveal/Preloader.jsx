@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
  */
 export default function Preloader() {
   const [loading, setLoading] = useState(true);
+  const [viewport, setViewport] = useState({ width: 0, height: 0 });
 
   useEffect(() => {
     // Artificial delay for that "Senior UI" premium splash feel
@@ -14,11 +15,25 @@ export default function Preloader() {
       setLoading(false);
     }, 1200);
 
+    if (typeof window !== 'undefined') {
+      const updateViewport = () => {
+        setViewport({ width: window.innerWidth, height: window.innerHeight });
+      };
+
+      updateViewport();
+      window.addEventListener('resize', updateViewport);
+
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener('resize', updateViewport);
+      };
+    }
+
     return () => clearTimeout(timer);
   }, []);
 
-  const initialPath = `M0 0 L${window.innerWidth} 0 L${window.innerWidth} ${window.innerHeight} L0 ${window.innerHeight} Z`;
-  const targetPath = `M0 0 L${window.innerWidth} 0 Q${window.innerWidth / 2} 0 0 0 Z`;
+  const initialPath = `M0 0 L${viewport.width} 0 L${viewport.width} ${viewport.height} L0 ${viewport.height} Z`;
+  const targetPath = `M0 0 L${viewport.width} 0 Q${viewport.width / 2} 0 0 0 Z`;
 
   const curveVars = {
     initial: {

@@ -8,16 +8,36 @@ export default function BrandEditor() {
     const [form, setForm] = useState({ ...defaultBrand });
     const [saving, setSaving] = useState(false);
     const [saved, setSaved] = useState(false);
+    const [error, setError] = useState('');
 
     useEffect(() => {
-        fetchSection('brand').then((data) => {
-            if (data) setForm(data);
-        });
-    }, []);
+        let mounted = true;
+
+        (async () => {
+            try {
+                const data = await fetchSection('brand');
+                if (mounted && data) {
+                    setForm(data);
+                    setError('');
+                }
+            } catch (err) {
+                console.error('Failed to load brand settings:', err);
+                if (mounted) {
+                    setError('Unable to load brand settings. Using defaults.');
+                    setForm({ ...defaultBrand });
+                }
+            }
+        })();
+
+        return () => {
+            mounted = false;
+        };
+    }, [defaultBrand]);
 
     const handleChange = (e) => {
         setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
         setSaved(false);
+        setError('');
     };
 
     const handleSave = async () => {
@@ -55,11 +75,18 @@ export default function BrandEditor() {
                 </button>
             </div>
 
+            {error && (
+                <div className="mb-4 rounded-xl border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-300">
+                    {error}
+                </div>
+            )}
+
             <div className="rounded-xl border border-[#1e2028] bg-[#0e0f14] p-6 space-y-5">
                 {fields.map((f) => (
                     <div key={f.name}>
-                        <label className="admin-label">{f.label}</label>
+                        <label htmlFor={`${f.name}-input`} className="admin-label">{f.label}</label>
                         <input
+                            id={`${f.name}-input`}
                             type="text"
                             name={f.name}
                             value={form[f.name] || ''}

@@ -41,7 +41,7 @@ function FAQItem({ item, index }) {
 }
 
 export default function Services() {
-  const content = useContent();
+  const { content = {} } = useContent();
   const services = content.services || defaultServices;
   const faqs = content.faqs || defaultFaqs;
 

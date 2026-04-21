@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Save, CheckCircle2, Plus, Trash2, GripVertical } from 'lucide-react';
 import { useContent } from '../../context/ContentContext';
 import { saveSection, fetchSection } from '../../lib/cms';
@@ -6,6 +6,7 @@ import { saveSection, fetchSection } from '../../lib/cms';
 const ICON_OPTIONS = ['Rocket', 'Building2', 'Bot', 'LayoutDashboard', 'Globe', 'Code2', 'Cpu', 'Layers', 'Sparkles', 'Zap', 'Trophy', 'Users', 'Star', 'ShieldCheck', 'Gauge'];
 
 const emptyService = {
+    id: '',
     icon: 'Rocket',
     title: '',
     headline: '',
@@ -14,16 +15,21 @@ const emptyService = {
     color: 'rgba(52,232,161,0.15)',
 };
 
+const createId = () => (typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : `service-${Date.now()}-${Math.random().toString(16).slice(2)}`);
+
 export default function ServicesEditor() {
-    const { services: defaultServices, refetch } = useContent();
+    const { content = {}, refetch } = useContent();
+    const defaultServices = content.services || [];
     const [items, setItems] = useState([]);
     const [saving, setSaving] = useState(false);
     const [saved, setSaved] = useState(false);
+    const timeoutRef = useRef(null);
 
     useEffect(() => {
         let mounted = true;
 
         const normalize = (list) => (list || []).map((s) => ({
+            id: s.id || createId(),
             ...s,
             icon: s.icon?.displayName || s.icon?.name || s.icon || 'Rocket',
         }));
@@ -44,6 +50,9 @@ export default function ServicesEditor() {
 
         return () => {
             mounted = false;
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
         };
     }, [defaultServices]);
 
@@ -63,19 +72,19 @@ export default function ServicesEditor() {
     };
 
     const addFeature = (idx) => {
-        setItems((prev) => prev.map((item, i) => i === idx ? { ...item, features: [...item.features, ''], saved: false } : item));
+        setItems((prev) => prev.map((item, i) => i === idx ? { ...item, features: [...item.features, ''] } : item));
         setSaved(false);
     };
 
     const removeFeature = (idx, fIdx) => {
         setItems((prev) => prev.map((item, i) => {
             if (i !== idx) return item;
-            return { ...item, features: item.features.filter((_, j) => j !== fIdx), saved: false };
+            return { ...item, features: item.features.filter((_, j) => j !== fIdx) };
         }));
         setSaved(false);
     };
 
-    const addItem = () => setItems((prev) => [...prev, { ...emptyService, features: ['', '', ''] }]);
+    const addItem = () => setItems((prev) => [...prev, { ...emptyService, id: createId(), features: ['', '', ''] }]);
 
     const removeItem = (idx) => {
         if (!confirm('Delete this service?')) return;
@@ -89,7 +98,10 @@ export default function ServicesEditor() {
             await saveSection('services', items);
             await refetch();
             setSaved(true);
-            setTimeout(() => setSaved(false), 3000);
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+            timeoutRef.current = setTimeout(() => setSaved(false), 3000);
         } catch (err) {
             alert('Failed to save: ' + err.message);
         } finally {
@@ -116,7 +128,7 @@ export default function ServicesEditor() {
 
             <div className="space-y-4">
                 {items.map((item, idx) => (
-                    <div key={idx} className="rounded-xl border border-[#1e2028] bg-[#0e0f14] p-5">
+                    <div key={item.id} className="rounded-xl border border-[#1e2028] bg-[#0e0f14] p-5">
                         <div className="mb-4 flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <GripVertical size={14} className="text-[#4a4e5e]" />

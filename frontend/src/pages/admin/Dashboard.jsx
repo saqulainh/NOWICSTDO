@@ -12,7 +12,7 @@ const sections = [
 ];
 
 export default function Dashboard() {
-    const content = useContent();
+    const { content = {} } = useContent();
 
     return (
         <div>

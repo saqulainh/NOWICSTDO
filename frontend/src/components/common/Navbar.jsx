@@ -7,7 +7,7 @@ import { brand as defaultBrand, navLinks } from '../../data/content';
 import { useContent } from '../../context/ContentContext';
 
 export default function Navbar() {
-  const content = useContent();
+  const { content = {} } = useContent();
   const brand = content.brand || defaultBrand;
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);

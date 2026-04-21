@@ -90,7 +90,7 @@ export default function AdminLayout() {
                 {/* Top bar */}
                 <header className="sticky top-0 z-20 flex h-14 items-center justify-between border-b border-[#1e2028] bg-[#0a0b0f]/80 backdrop-blur-xl px-6">
                     <p className="text-xs text-[#6b6f80]">
-                        Logged in as <span className="font-semibold text-[#34d99a]">{admin?.username}</span>
+                        Logged in as <span className="font-semibold text-[#34d99a]">{admin?.username || 'Unknown'}</span>
                     </p>
                 </header>
 

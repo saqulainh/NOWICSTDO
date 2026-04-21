@@ -15,10 +15,11 @@ const defaultMilestones = [
 ];
 
 export default function About() {
-  const content = useContent();
-  const whyUs = content.whyUs || defaultWhyUs;
-  const teamValues = content.teamValues || defaultValues;
-  const milestones = content.milestones || defaultMilestones;
+  const contentCtx = useContent() || {};
+  const content = contentCtx.content || {};
+  const whyUs = content?.whyUs || defaultWhyUs;
+  const teamValues = content?.teamValues || defaultValues;
+  const milestones = content?.milestones || defaultMilestones;
 
   return (
     <>

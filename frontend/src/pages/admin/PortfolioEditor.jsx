@@ -28,7 +28,8 @@ function normalizeProject(item = {}) {
 }
 
 export default function PortfolioEditor() {
-    const { portfolioItems: defaults, refetch } = useContent();
+    const { content = {}, refetch } = useContent();
+    const defaults = content.portfolioItems || [];
     const [items, setItems] = useState([]);
     const [saving, setSaving] = useState(false);
     const [saved, setSaved] = useState(false);
@@ -79,9 +80,11 @@ export default function PortfolioEditor() {
 
     const handleSave = async () => {
         setSaving(true);
+        let saveSucceeded = false;
+
         try {
             await saveSection('portfolioItems', items);
-            await refetch();
+            saveSucceeded = true;
             setSaved(true);
             if (savedTimeoutRef.current) {
                 clearTimeout(savedTimeoutRef.current);
@@ -90,6 +93,13 @@ export default function PortfolioEditor() {
         } catch (err) {
             alert('Failed to save: ' + err.message);
         } finally {
+            if (saveSucceeded) {
+                try {
+                    await refetch();
+                } catch (err) {
+                    console.warn('Saved successfully, but failed to refresh data:', err);
+                }
+            }
             setSaving(false);
         }
     };

@@ -83,7 +83,7 @@ export function ContentProvider({ children }) {
     useEffect(() => { fetchContent(); }, []);
 
     return (
-        <ContentContext.Provider value={{ ...content, loading, refetch: fetchContent }}>
+        <ContentContext.Provider value={{ content, loading, refetch: fetchContent }}>
             {children}
         </ContentContext.Provider>
     );
@@ -91,7 +91,9 @@ export function ContentProvider({ children }) {
 
 export function useContent() {
     const ctx = useContext(ContentContext);
-    if (!ctx) throw new Error('useContent must be used within ContentProvider');
+    if (!ctx) {
+        return { content: {}, loading: false, refetch: async () => {} };
+    }
     return ctx;
 }
 

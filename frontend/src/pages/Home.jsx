@@ -53,7 +53,8 @@ function StatCard({ item, index }) {
 }
 
 export default function Home() {
-  const { services = [], highlights = [], whyUs = [], portfolioItems = [] } = useContent() || {};
+  const { content = {} } = useContent() || {};
+  const { services = [], highlights = [], whyUs = [], portfolioItems = [] } = content;
 
   return (
     <>

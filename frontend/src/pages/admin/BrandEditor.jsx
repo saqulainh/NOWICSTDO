@@ -1,38 +1,49 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Save, CheckCircle2 } from 'lucide-react';
 import { useContent } from '../../context/ContentContext';
 import { saveSection, fetchSection } from '../../lib/cms';
 
 export default function BrandEditor() {
-    const { brand: defaultBrand, refetch } = useContent();
+    const { content = {}, refetch } = useContent();
+    const defaultBrand = content.brand || {};
     const [form, setForm] = useState({ ...defaultBrand });
     const [saving, setSaving] = useState(false);
     const [saved, setSaved] = useState(false);
     const [error, setError] = useState('');
+    const mountedRef = useRef(false);
+    const defaultBrandRef = useRef(defaultBrand);
+    const savedTimeoutRef = useRef(null);
 
     useEffect(() => {
-        let mounted = true;
+        defaultBrandRef.current = defaultBrand;
+    }, [defaultBrand]);
+
+    useEffect(() => {
+        mountedRef.current = true;
 
         (async () => {
             try {
                 const data = await fetchSection('brand');
-                if (mounted && data) {
+                if (mountedRef.current && data) {
                     setForm(data);
                     setError('');
                 }
             } catch (err) {
                 console.error('Failed to load brand settings:', err);
-                if (mounted) {
+                if (mountedRef.current) {
                     setError('Unable to load brand settings. Using defaults.');
-                    setForm({ ...defaultBrand });
+                    setForm({ ...defaultBrandRef.current });
                 }
             }
         })();
 
         return () => {
-            mounted = false;
+            mountedRef.current = false;
+            if (savedTimeoutRef.current) {
+                clearTimeout(savedTimeoutRef.current);
+            }
         };
-    }, [defaultBrand]);
+    }, []);
 
     const handleChange = (e) => {
         setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
@@ -46,7 +57,14 @@ export default function BrandEditor() {
             await saveSection('brand', form);
             await refetch();
             setSaved(true);
-            setTimeout(() => setSaved(false), 3000);
+            if (savedTimeoutRef.current) {
+                clearTimeout(savedTimeoutRef.current);
+            }
+            savedTimeoutRef.current = setTimeout(() => {
+                if (mountedRef.current) {
+                    setSaved(false);
+                }
+            }, 3000);
         } catch (err) {
             alert('Failed to save: ' + err.message);
         } finally {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Save, CheckCircle2, Plus, Trash2 } from 'lucide-react';
 import { useContent } from '../../context/ContentContext';
 import { saveSection, fetchSection } from '../../lib/cms';
@@ -40,13 +40,16 @@ const normalizeMilestone = (item = {}) => ({
 });
 
 export default function AboutEditor() {
-    const { whyUs: defaultWhyUs, teamValues: defaultValues, refetch } = useContent();
+    const { content = {}, refetch } = useContent();
+    const defaultWhyUs = content.whyUs || [];
+    const defaultValues = content.teamValues || [];
     const [whyUs, setWhyUs] = useState([]);
     const [teamValues, setTeamValues] = useState([]);
     const [milestones, setMilestones] = useState([]);
     const [saving, setSaving] = useState(false);
     const [saved, setSaved] = useState(false);
     const [error, setError] = useState('');
+    const timeoutRef = useRef(null);
 
     useEffect(() => {
         let mounted = true;
@@ -90,6 +93,9 @@ export default function AboutEditor() {
 
         return () => {
             mounted = false;
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
         };
     }, [defaultWhyUs, defaultValues]);
 
@@ -107,7 +113,11 @@ export default function AboutEditor() {
         setError('');
     };
 
-    const addWhyUs = () => setWhyUs((prev) => [...prev, normalizeWhyUs()]);
+    const addWhyUs = () => {
+        setWhyUs((prev) => [...prev, normalizeWhyUs()]);
+        setSaved(false);
+        setError('');
+    };
     const removeWhyUs = (idx) => { setWhyUs((prev) => prev.filter((_, i) => i !== idx)); setSaved(false); };
 
     const updateValue = (idx, val) => {
@@ -115,7 +125,11 @@ export default function AboutEditor() {
         setSaved(false);
         setError('');
     };
-    const addValue = () => setTeamValues((prev) => [...prev, normalizeValue()]);
+    const addValue = () => {
+        setTeamValues((prev) => [...prev, normalizeValue()]);
+        setSaved(false);
+        setError('');
+    };
     const removeValue = (idx) => { setTeamValues((prev) => prev.filter((_, i) => i !== idx)); setSaved(false); };
 
     const updateMilestone = (idx, field, val) => {
@@ -123,7 +137,11 @@ export default function AboutEditor() {
         setSaved(false);
         setError('');
     };
-    const addMilestone = () => setMilestones((prev) => [...prev, normalizeMilestone()]);
+    const addMilestone = () => {
+        setMilestones((prev) => [...prev, normalizeMilestone()]);
+        setSaved(false);
+        setError('');
+    };
     const removeMilestone = (idx) => { setMilestones((prev) => prev.filter((_, i) => i !== idx)); setSaved(false); };
 
     const handleSave = async () => {
@@ -134,9 +152,13 @@ export default function AboutEditor() {
             await saveSection('milestones', milestones);
             await refetch();
             setSaved(true);
-            setTimeout(() => setSaved(false), 3000);
+            setError('');
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+            timeoutRef.current = setTimeout(() => setSaved(false), 3000);
         } catch (err) {
-            alert('Failed to save: ' + err.message);
+            setError(err?.message || String(err) || 'Failed to save');
         } finally {
             setSaving(false);
         }

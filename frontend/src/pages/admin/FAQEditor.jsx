@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Save, CheckCircle2, Plus, Trash2 } from 'lucide-react';
 import { useContent } from '../../context/ContentContext';
 import { saveSection, fetchSection } from '../../lib/cms';
@@ -22,11 +22,13 @@ function normalizeItems(list) {
 }
 
 export default function FAQEditor() {
-    const { faqs: defaults, refetch } = useContent();
+    const { content = {}, refetch } = useContent();
+    const defaults = content.faqs || [];
     const [items, setItems] = useState([]);
     const [saving, setSaving] = useState(false);
     const [saved, setSaved] = useState(false);
     const [error, setError] = useState('');
+    const timeoutRef = useRef(null);
 
     useEffect(() => {
         let mounted = true;
@@ -49,6 +51,9 @@ export default function FAQEditor() {
 
         return () => {
             mounted = false;
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
         };
     }, [defaults]);
 
@@ -72,7 +77,10 @@ export default function FAQEditor() {
             await saveSection('faqs', items);
             await refetch();
             setSaved(true);
-            setTimeout(() => setSaved(false), 3000);
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+            timeoutRef.current = setTimeout(() => setSaved(false), 3000);
         } catch (err) {
             alert('Failed to save: ' + err.message);
         } finally {
@@ -94,6 +102,12 @@ export default function FAQEditor() {
                     </button>
                 </div>
             </div>
+
+            {error && (
+                <div className="mb-4 rounded-xl border border-amber-500/20 bg-amber-500/10 px-4 py-3 text-sm text-amber-300">
+                    {error}
+                </div>
+            )}
 
             <div className="space-y-3">
                 {items.map((item, idx) => (

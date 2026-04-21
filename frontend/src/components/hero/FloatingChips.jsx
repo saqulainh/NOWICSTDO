@@ -18,7 +18,7 @@ const CHIPS = [
 
 export default function FloatingChips() {
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
       {CHIPS.map((chip) => (
         <motion.div
           key={chip.label}

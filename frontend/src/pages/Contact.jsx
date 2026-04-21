@@ -16,7 +16,7 @@ const promise = [
 const projectTypes = ['MVP Development', 'Business Website', 'AI Web App', 'Admin Dashboard', 'SaaS Platform', 'API / Backend', 'Other'];
 
 export default function Contact() {
-  const content = useContent();
+  const { content = {} } = useContent();
   const brand = content.brand || defaultBrand;
 
   const contactInfo = [

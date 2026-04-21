@@ -9,7 +9,7 @@ import { useContent } from '../context/ContentContext';
 const FILTERS = ['All', 'Full-Stack Platform', 'Business Website', 'AI Web Application', 'Healthcare Platform'];
 
 export default function Portfolio() {
-  const content = useContent();
+  const { content = {} } = useContent();
   const portfolioItems = content.portfolioItems || defaultPortfolioItems;
   const [active, setActive] = useState('All');
   const filtered = active === 'All' ? portfolioItems : portfolioItems.filter((p) => p.category === active);

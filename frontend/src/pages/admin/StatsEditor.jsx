@@ -16,7 +16,9 @@ const normalizeItems = (list, fallbackIcon) => (Array.isArray(list) ? list : [])
 }));
 
 export default function StatsEditor() {
-    const { stats: defaultStats, highlights: defaultHighlights, refetch } = useContent();
+    const { content = {}, refetch } = useContent();
+    const defaultStats = content.stats || [];
+    const defaultHighlights = content.highlights || [];
     const [stats, setStats] = useState([]);
     const [highlights, setHighlights] = useState([]);
     const [saving, setSaving] = useState(false);
@@ -34,16 +36,19 @@ export default function StatsEditor() {
 
             if (!mounted) return;
 
+            const loadErrors = [];
             if (statsResult.status === 'rejected') {
                 console.error('Failed to load stats:', statsResult.reason);
+                loadErrors.push(`Failed to load stats: ${statsResult.reason?.message || String(statsResult.reason)}`);
             }
             if (highlightsResult.status === 'rejected') {
                 console.error('Failed to load highlights:', highlightsResult.reason);
+                loadErrors.push(`Failed to load highlights: ${highlightsResult.reason?.message || String(highlightsResult.reason)}`);
             }
 
             setStats(normalizeItems(statsResult.status === 'fulfilled' && statsResult.value ? statsResult.value : defaultStats, 'Gauge'));
             setHighlights(normalizeItems(highlightsResult.status === 'fulfilled' && highlightsResult.value ? highlightsResult.value : defaultHighlights, 'Zap'));
-            setError('');
+            setError(loadErrors.join(' | '));
         })().catch((err) => {
             console.error('Failed to load stats/highlights:', err);
             if (mounted) {
@@ -81,7 +86,7 @@ export default function StatsEditor() {
             setSaved(true);
             setTimeout(() => setSaved(false), 3000);
         } catch (err) {
-            alert('Failed to save: ' + err.message);
+            setError(err?.message || String(err) || 'Failed to save');
         } finally {
             setSaving(false);
         }

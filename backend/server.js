@@ -2,11 +2,17 @@ const http = require('http');
 const crypto = require('crypto');
 
 const PORT = Number(process.env.PORT || 8787);
-const ADMIN_USER = process.env.ADMIN_USER || 'admin';
-const ADMIN_PASS = process.env.ADMIN_PASS || 'NowicAdmin@2026';
-const SESSION_SECRET = process.env.ADMIN_SESSION_SECRET || 'nowic-studio-admin-session-secret';
+const ADMIN_USER = process.env.ADMIN_USER;
+const ADMIN_PASS = process.env.ADMIN_PASS;
+const SESSION_SECRET = process.env.ADMIN_SESSION_SECRET;
 const COOKIE_NAME = 'nowic_admin_session';
 const SESSION_TTL_MS = 1000 * 60 * 60 * 8;
+
+const missingEnv = ['ADMIN_USER', 'ADMIN_PASS', 'ADMIN_SESSION_SECRET'].filter((name) => !process.env[name]);
+if (missingEnv.length > 0) {
+  console.error(`Fatal configuration error: missing required environment variable(s): ${missingEnv.join(', ')}`);
+  process.exit(1);
+}
 
 function base64Url(input) {
   return Buffer.from(input).toString('base64url');
@@ -90,11 +96,25 @@ function setSessionCookie(res, token, maxAgeSeconds) {
   res.setHeader('Set-Cookie', cookie);
 }
 
+function timingSafeStringEqual(a, b) {
+  const aBuffer = Buffer.from(String(a), 'utf8');
+  const bBuffer = Buffer.from(String(b), 'utf8');
+
+  if (aBuffer.length !== bBuffer.length) {
+    return false;
+  }
+
+  return crypto.timingSafeEqual(aBuffer, bBuffer);
+}
+
 const server = http.createServer(async (req, res) => {
   if (req.url === '/api/admin/login' && req.method === 'POST') {
     try {
       const { username = '', password = '' } = await readJson(req);
-      if (username !== ADMIN_USER || password !== ADMIN_PASS) {
+      const validUsername = timingSafeStringEqual(username, ADMIN_USER);
+      const validPassword = timingSafeStringEqual(password, ADMIN_PASS);
+
+      if (!validUsername || !validPassword) {
         sendJson(res, 401, { message: 'Invalid credentials' });
         return;
       }
@@ -103,7 +123,8 @@ const server = http.createServer(async (req, res) => {
       setSessionCookie(res, token, Math.floor(SESSION_TTL_MS / 1000));
       sendJson(res, 200, { admin: { username } });
     } catch (error) {
-      sendJson(res, 400, { message: error.message || 'Invalid request' });
+      console.error('Admin login request failed:', error);
+      sendJson(res, 400, { message: 'Invalid request' });
     }
     return;
   }

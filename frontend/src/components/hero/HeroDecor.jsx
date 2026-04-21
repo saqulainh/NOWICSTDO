@@ -8,7 +8,7 @@ import React from 'react';
  */
 export default function HeroDecor({ className = '' }) {
   return (
-    <div className={`hero-decor-wrap pointer-events-none absolute inset-0 overflow-hidden ${className}`} aria-hidden>
+    <div className={`hero-decor-wrap pointer-events-none absolute inset-0 overflow-hidden ${className}`} aria-hidden="true">
       {/* Spotlight beams — centered and animated */}
       <div className="particle-spotlights">
         <div className="particle-beam particle-beam--left" />

@@ -19,12 +19,11 @@ CREATE POLICY "Public read access" ON site_content
   FOR SELECT USING (true);
 
 -- Allow authenticated insert/update (for admin CMS - use anon key with RLS disabled for now)
--- If you want open write access from the admin panel (easiest for now):
 CREATE POLICY "Allow insert" ON site_content
-  FOR INSERT WITH CHECK (true);
+  FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
 
 CREATE POLICY "Allow update" ON site_content
-  FOR UPDATE USING (true);
+  FOR UPDATE USING (auth.uid() IS NOT NULL);
 
 -- Seed initial data (optional - the admin panel will auto-populate these)
 -- INSERT INTO site_content (section, data) VALUES ('brand', '{"name": "Nowic Studio", "tagline": "Vision to Version", "email": "hello@nowicstudio.com", "phone": "+91 98765 43210", "location": "India 🇮🇳"}');

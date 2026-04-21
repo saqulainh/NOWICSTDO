@@ -7,7 +7,12 @@ import { motion, AnimatePresence } from 'framer-motion';
  */
 export default function Preloader() {
   const [loading, setLoading] = useState(true);
-  const [viewport, setViewport] = useState({ width: 0, height: 0 });
+  const [viewport, setViewport] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return { width: window.innerWidth, height: window.innerHeight };
+    }
+    return { width: 1280, height: 720 };
+  });
 
   useEffect(() => {
     // Artificial delay for that "Senior UI" premium splash feel

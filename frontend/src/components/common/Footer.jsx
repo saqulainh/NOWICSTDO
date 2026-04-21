@@ -58,14 +58,14 @@ function SocialLink({ href, label, className, children }) {
   }
 
   return (
-    <button type="button" aria-label={label} className={baseClassName}>
+    <button type="button" aria-label={label} aria-disabled="true" disabled className={`${baseClassName} opacity-45 pointer-events-none`.trim()}>
       {children}
     </button>
   );
 }
 
 export default function Footer() {
-  const content = useContent();
+  const { content = {} } = useContent();
   const brand = content.brand || defaultBrand;
 
   return (

@@ -3,13 +3,15 @@ import { createContext, useContext, useState, useEffect } from 'react';
 const AuthContext = createContext(null);
 
 async function adminRequest(path, options = {}) {
+    const finalHeaders = {
+        'Content-Type': 'application/json',
+        ...(options.headers || {}),
+    };
+
     const response = await fetch(`/api/admin${path}`, {
-        credentials: 'include',
-        headers: {
-            'Content-Type': 'application/json',
-            ...(options.headers || {}),
-        },
         ...options,
+        credentials: 'include',
+        headers: finalHeaders,
     });
 
     const payload = await response.json().catch(() => ({}));

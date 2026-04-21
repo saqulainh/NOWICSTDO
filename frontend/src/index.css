@@ -23,9 +23,56 @@
   body {
     @apply font-body antialiased;
     color: #f0f0f3;
-    /* very dark forest green gradient */
-    background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(189, 223, 188, 0.08) 0%, transparent 60%), linear-gradient(170deg, #09110c 0%, #0c1811 50%, #09110c 100%);
+    /* Immersive Obsidian Forest background */
+    background: radial-gradient(ellipse 70% 50% at 50% -10%, rgba(189, 223, 188, 0.05) 0%, transparent 60%), linear-gradient(180deg, #050806 0%, #080c09 70%, #050806 100%);
     background-attachment: fixed;
+    position: relative;
+  }
+
+  /* Global Film Grain Texture */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10000;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+  }
+
+  /* ── LENIS SMOOTH SCROLL STYLES ── */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  .lenis.lenis-scrolling iframe {
+    pointer-events: none;
+  }
+
+  /* ── CUSTOM CURSOR STYLES ── */
+  @media (pointer: fine) {
+
+    *,
+    *::before,
+    *::after {
+      cursor: none !important;
+    }
   }
 
   *::-webkit-scrollbar {
@@ -71,19 +118,27 @@
   }
 
   /* ── Card: Off Road Green Glassmorphism ── */
-  .card, .feature-card, .glass-card {
+  .card,
+  .feature-card,
+  .glass-card {
     @apply p-6 relative overflow-hidden;
     color: #f0f0f3;
-    border-radius: 1.2rem;
-    background: rgba(16, 30, 22, 0.6); /* Translucent off road green panel */
-    backdrop-filter: blur(24px) saturate(140%);
-    border: 1px solid rgba(189, 223, 188, 0.12); /* subtle muted green border */
-    box-shadow: inset 0 1px 0 rgba(189, 223, 188, 0.1), 0px 8px 24px -4px rgba(0,0,0,0.5);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 1.5rem;
+    background: rgba(11, 16, 13, 0.4);
+    /* Refined translucent obsidian */
+    backdrop-filter: blur(28px) saturate(160%);
+    border: 1px solid rgba(189, 223, 188, 0.05);
+    /* very subtle mint boundary */
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.02),
+      0px 10px 40px -10px rgba(0, 0, 0, 0.6);
+    transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1), border-color 0.4s ease, box-shadow 0.4s ease;
   }
 
   /* Add subtle glowing accent behind the card content */
-  .card::before, .feature-card::before, .glass-card::before {
+  .card::before,
+  .feature-card::before,
+  .glass-card::before {
     content: '';
     position: absolute;
     inset: 0;
@@ -96,7 +151,9 @@
     mask-composite: exclude;
   }
 
-  .card:hover, .feature-card:hover, .glass-card:hover {
+  .card:hover,
+  .feature-card:hover,
+  .glass-card:hover {
     transform: translateY(-4px);
     border-color: rgba(189, 223, 188, 0.3);
     box-shadow: inset 0 1px 0 rgba(189, 223, 188, 0.2), 0px 16px 32px -4px rgba(9, 17, 12, 0.9), 0px 0px 40px -10px rgba(189, 223, 188, 0.1);
@@ -115,28 +172,23 @@
 
   /* ── CTA Button ── */
   .cta-btn {
-    @apply relative inline-flex items-center justify-center rounded px-6 py-3 text-sm font-bold uppercase tracking-wider overflow-hidden;
+    @apply relative inline-flex items-center justify-center rounded-lg px-8 py-3.5 text-xs font-bold uppercase tracking-[0.1em] overflow-hidden;
     background-color: #ffffff;
-    color: #09110c;
-    border: 2px solid #09110c;
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    /* Layered 3D retro shadow using white & green styles */
+    color: #050806;
+    border: 0;
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
     box-shadow:
-      2px 2px 0px #bddfbc,
-      4px 4px 0px #a7cfaa,
-      6px 6px 0px #8cb88f,
-      8px 8px 0px #70a174,
-      10px 10px 0px #578a5b,
-      12px 12px 0px #3e7343;
+      0px 4px 0px #bddfbc,
+      0px 8px 15px rgba(0, 0, 0, 0.3);
   }
 
   .cta-btn:hover {
-    background-color: #f0f0f3;
-    color: #09110c;
+    background-color: #fdfdfd;
+    color: #050806;
     box-shadow:
-      2px 2px 0px #bddfbc,
-      4px 4px 0px #a7cfaa;
-    transform: translate(8px, 8px);
+      0px 2px 0px #bddfbc,
+      0px 12px 25px rgba(189, 223, 188, 0.15);
+    transform: translateY(2px);
   }
 
   .cta-btn:active {
@@ -718,4 +770,105 @@
   .brand-row-bottom {
     margin-left: 0.4em;
   }
+}
+
+/* ═══════════════════════════════════
+   ADMIN PANEL STYLES
+═══════════════════════════════════ */
+
+/* Admin inputs */
+.admin-input {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid #1e2028;
+  background: #16171e;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.8125rem;
+  color: #f0f0f3;
+  outline: none;
+  transition: border-color 0.2s, background-color 0.2s;
+  font-family: 'Inter', 'Outfit', sans-serif;
+}
+
+.admin-input::placeholder {
+  color: #4a4e5e;
+}
+
+.admin-input:focus {
+  border-color: rgba(52, 217, 154, 0.4);
+  background: #1a1b24;
+}
+
+.admin-input option {
+  background: #0e0f14;
+  color: #f0f0f3;
+}
+
+/* Admin labels */
+.admin-label {
+  display: block;
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6b6f80;
+  margin-bottom: 0.375rem;
+}
+
+/* Admin save button */
+.admin-save-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 0.75rem;
+  background: #34d99a;
+  color: #0a0b0f;
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  border: none;
+  transition: all 0.2s;
+  cursor: pointer;
+  font-family: 'Inter', 'Outfit', sans-serif;
+}
+
+.admin-save-btn:hover {
+  background: #2bc48a;
+}
+
+.admin-save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Admin add button */
+.admin-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 0.75rem;
+  background: rgba(52, 217, 154, 0.1);
+  color: #34d99a;
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border: 1px solid rgba(52, 217, 154, 0.2);
+  transition: all 0.2s;
+  cursor: pointer;
+  font-family: 'Inter', 'Outfit', sans-serif;
+}
+
+.admin-add-btn:hover {
+  background: rgba(52, 217, 154, 0.15);
+  border-color: rgba(52, 217, 154, 0.3);
+}
+
+/* Override cursor: none for admin pages */
+[class*="admin"] *,
+[class*="admin"] *::before,
+[class*="admin"] *::after,
+[data-admin] *,
+[data-admin] *::before,
+[data-admin] *::after {
+  cursor: auto !important;
 }

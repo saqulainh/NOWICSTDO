@@ -1,12 +1,13 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
-import SectionHeading from '../components/SectionHeading';
-import ScrollReveal from '../components/ScrollReveal';
-import BrandLogo from '../components/BrandLogo';
-import { teamValues, whyUs } from '../data/content';
+import SectionHeading from '../components/common/SectionHeading';
+import ScrollReveal from '../components/reveal/ScrollReveal';
+import BrandLogo from '../components/common/BrandLogo';
+import { teamValues as defaultValues, whyUs as defaultWhyUs } from '../data/content';
+import { useContent } from '../context/ContentContext';
 
-const milestones = [
+const defaultMilestones = [
   { year: '2023', title: 'Studio Founded', desc: 'Nowic Studio was born from a belief: great products deserve great execution.' },
   { year: '2024', title: '25+ Projects', desc: 'Expanded to full-stack platforms, AI apps, and healthcare solutions.' },
   { year: '2025', title: 'AI-First', desc: 'Integrated AI workflows for 3× faster product delivery.' },
@@ -14,6 +15,11 @@ const milestones = [
 ];
 
 export default function About() {
+  const content = useContent();
+  const whyUs = content.whyUs || defaultWhyUs;
+  const teamValues = content.teamValues || defaultValues;
+  const milestones = content.milestones || defaultMilestones;
+
   return (
     <>
       {/* Hero */}
@@ -55,7 +61,7 @@ export default function About() {
                     { val: '50+', label: 'Projects' },
                     { val: '98%', label: 'Satisfaction' },
                     { val: '21d', label: 'Avg Launch' },
-                    { val: '3+',  label: 'Years' },
+                    { val: '3+', label: 'Years' },
                   ].map((s) => (
                     <div key={s.label} className="rounded-xl bg-surface p-3">
                       <p className="font-display text-lg font-bold text-text">{s.val}</p>

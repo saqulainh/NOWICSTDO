@@ -4,25 +4,23 @@ export default {
   theme: {
     extend: {
       colors: {
-        /* === Off Road Green Background === */
-        bg: '#09110c',      // very dark green/black
-        panel: '#101e16',   // dark green card bg
-        surface: '#182c20', // lighter hover green
-        elevated: '#203a29',
-        border: '#233d2d',  // subtle green border
+        /* === Obsidian Forest Ecosystem === */
+        bg: '#050806',       // Deep inked ground
+        panel: '#0b100d',    // Subtle elevation
+        surface: '#121915',  // Interactive component surface
+        elevated: '#1a231e', // Hover/Active states
+        border: '#1f2a24',   // Structural boundary
 
-        /* === Muted Light Green Accent === */
-        mint: '#bddfbc',    // Primary requested color
-        jade: '#a7cfaa',    // slightly darker variation
-        emerald: '#8cb88f', // even darker
+        /* === Satin Mint Accent === */
+        mint: '#bddfbc',    
+        jade: '#a7cfaa',    
+        emerald: '#8cb88f', 
         glow: '#bddfbc',
 
-        /* === Neutral text === */
+        /* === Typography & Neutrals === */
         text: '#f0f0f3',
         sub: '#b0b3c0',
-        muted: '#7a8580',   // slightly green-tinted grey
-
-        /* === Extra accent === */
+        muted: '#5c665e',   
         accent2: '#bddfbc', 
       },
       fontFamily: {

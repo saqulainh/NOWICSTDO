@@ -1,4 +1,4 @@
-import { brand } from '../data/content';
+import { brand } from '../../data/content';
 
 export default function BrandLogo({
   className = '',

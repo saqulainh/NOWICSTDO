@@ -2,13 +2,16 @@ import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, Github, ArrowRight, CheckCircle2 } from 'lucide-react';
-import SectionHeading from '../components/SectionHeading';
-import ScrollReveal from '../components/ScrollReveal';
-import MagnifierText from '../components/MagnifierText';
-import FloatingChips from '../components/FloatingChips';
-import HeroDecor from '../components/HeroDecor';
-import BrandTitle from '../components/BrandTitle';
-import { services, highlights, whyUs, portfolioItems } from '../data/content';
+import SectionHeading from '../components/common/SectionHeading';
+import ScrollReveal from '../components/reveal/ScrollReveal';
+import FloatingChips from '../components/hero/FloatingChips';
+import HeroDecor from '../components/hero/HeroDecor';
+import BrandTitle from '../components/common/BrandTitle';
+import InteractiveCard from '../components/ui/InteractiveCard';
+import Magnetic from '../components/ui/Magnetic';
+import MaskText from '../components/reveal/MaskText';
+import BoutiqueReveal from '../components/reveal/BoutiqueReveal';
+import { useContent } from '../context/ContentContext';
 
 /* ── Counter hook ── */
 function useCountUp(target, duration = 1.4) {
@@ -50,6 +53,8 @@ function StatCard({ item, index }) {
 }
 
 export default function Home() {
+  const { services, highlights, whyUs, portfolioItems } = useContent();
+
   return (
     <>
       {/* ═══ HERO ═══ */}
@@ -60,77 +65,62 @@ export default function Home() {
         {/* Floating tech chips */}
         <FloatingChips />
 
-        <div className="container-shell relative z-10 flex flex-col items-center justify-center text-center pt-28 pb-28 lg:pt-36 lg:pb-36">
-
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.3 }}
-              className="eyebrow"
-            >
-              AI-Powered Software Agency
-            </motion.p>
+        <BoutiqueReveal delay={0.6} className="container-shell relative z-10 flex flex-col items-center justify-center text-center pt-28 pb-28 lg:pt-36 lg:pb-36">
+          <div className="flex flex-col items-center">
+            {/* Entry eyebrow */}
+            <MaskText delay={0.1}>
+              <p className="eyebrow">AI-Powered Software Agency</p>
+            </MaskText>
 
             <BrandTitle className="mt-5 text-6xl sm:text-7xl lg:text-[88px]" />
 
             {/* Tagline — styled subtitle */}
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45, delay: 0.65 }}
-              className="mt-4 font-display text-xl font-medium tracking-wide sm:text-2xl"
-              style={{
-                background: 'linear-gradient(90deg, #5eeeb5, #34d99a, #22c97d)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-            >
-              From Vision to Version.
-            </motion.p>
+            <MaskText delay={0.7} className="mt-6">
+              <p className="flex items-center justify-center gap-2 text-base font-medium tracking-tight text-mint/90 sm:text-xl">
+                <span className="h-px w-6 bg-mint/30" />
+                From Vision to Version.
+                <span className="h-px w-6 bg-mint/30" />
+              </p>
+            </MaskText>
 
             {/* Thin divider */}
             <motion.div
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
+              transition={{ duration: 0.6, delay: 1.1 }}
               className="mt-5 h-px w-24"
               style={{ background: 'linear-gradient(90deg, transparent, rgba(52,217,154,0.5), transparent)' }}
             />
 
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.45, delay: 0.85 }}
-              className="mt-5 max-w-xl text-base leading-relaxed text-sub sm:text-lg"
-            >
-              <MagnifierText
-                text="We build MVPs, AI web apps, business websites and dashboards — shipped in days, not months."
-                highlightWords={['MVPs,', 'AI', 'web', 'apps,']}
-                radius={80}
-                maxScale={1.3}
-                className="justify-center"
-              />
-            </motion.p>
+            <MaskText delay={0.8} className="mt-8">
+              <p className="mx-auto max-w-2xl text-base leading-relaxed text-sub sm:text-lg md:text-xl">
+                We build MVPs, <span className="font-bold text-text">AI web</span> apps, business <span className="font-bold text-text">websites</span> and dashboards <br className="hidden md:block" />
+                — shipped in days, not months.
+              </p>
+            </MaskText>
 
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.9 }}
+              transition={{ duration: 0.4, delay: 1.2 }}
               className="mt-10 flex flex-wrap items-center justify-center gap-4"
             >
-              <Link to="/contact" className="cta-btn">
-                Launch Your Project <ArrowRight size={15} className="ml-2" />
-              </Link>
-              <Link to="/portfolio" className="outline-btn">
-                View Our Work
-              </Link>
+              <Magnetic>
+                <Link to="/contact" className="cta-btn">
+                  Launch Your Project <ArrowRight size={15} className="ml-2" />
+                </Link>
+              </Magnetic>
+              <Magnetic>
+                <Link to="/portfolio" className="outline-btn">
+                  View Our Work
+                </Link>
+              </Magnetic>
             </motion.div>
 
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 1.1 }}
+              transition={{ delay: 1.4 }}
               className="mt-8 flex flex-wrap justify-center gap-5"
             >
               {['30+ Projects', '98% Satisfaction', 'India Based'].map((b) => (
@@ -140,7 +130,8 @@ export default function Home() {
                 </span>
               ))}
             </motion.div>
-        </div>
+          </div>
+        </BoutiqueReveal>
       </section>
 
       {/* ═══ STATS BAR ═══ */}
@@ -167,11 +158,7 @@ export default function Home() {
             const Icon = service.icon;
             return (
               <ScrollReveal key={service.title} delay={i * 0.06}>
-                <motion.article
-                  whileHover={{ y: -4 }}
-                  transition={{ duration: 0.25 }}
-                  className="feature-card group h-full"
-                >
+                <InteractiveCard className="feature-card h-full">
                   <div className="icon-box mb-4">
                     <Icon size={18} />
                   </div>
@@ -189,7 +176,7 @@ export default function Home() {
                       </li>
                     ))}
                   </ul>
-                </motion.article>
+                </InteractiveCard>
               </ScrollReveal>
             );
           })}
@@ -221,13 +208,13 @@ export default function Home() {
                 const Icon = item.icon;
                 return (
                   <ScrollReveal key={item.title} delay={i * 0.06}>
-                    <div className="card p-5 h-full">
+                    <InteractiveCard className="p-5 h-full">
                       <div className="icon-box mb-3">
                         <Icon size={16} />
                       </div>
                       <h3 className="font-display text-sm font-bold text-text">{item.title}</h3>
                       <p className="mt-1.5 text-sm leading-relaxed text-sub">{item.desc}</p>
-                    </div>
+                    </InteractiveCard>
                   </ScrollReveal>
                 );
               })}
@@ -247,13 +234,9 @@ export default function Home() {
         <div className="mt-12 grid gap-4 md:grid-cols-2">
           {portfolioItems.slice(0, 4).map((item, i) => (
             <ScrollReveal key={item.title} delay={i * 0.07}>
-              <motion.article
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.25 }}
-                className="card group overflow-hidden h-full"
-              >
+              <InteractiveCard className="group overflow-hidden h-full p-0">
                 {/* Preview area */}
-                <div className="relative h-40 bg-surface flex items-center justify-center">
+                <div className="relative h-44 bg-surface/30 flex items-center justify-center border-b border-white/5">
                   <span className="text-xs font-semibold uppercase tracking-[0.15em] text-muted">
                     {item.category}
                   </span>
@@ -264,26 +247,30 @@ export default function Home() {
                   )}
                 </div>
 
-                <div className="p-5">
+                <div className="p-6">
                   <h3 className="font-display text-lg font-bold text-text">{item.title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-sub">{item.description}</p>
 
-                  <div className="mt-3 flex flex-wrap gap-1.5">
+                  <div className="mt-4 flex flex-wrap gap-1.5">
                     {item.tags.map((tag) => (
-                      <span key={tag} className="tag">{tag}</span>
+                      <span key={tag} className="tag bg-white/5">{tag}</span>
                     ))}
                   </div>
 
-                  <div className="mt-4 flex gap-2">
-                    <a href="#" className="portfolio-btn flex-1 text-xs">
-                      Live Demo <ArrowUpRight size={12} className="ml-1" />
-                    </a>
-                    <a href="#" className="portfolio-btn flex-1 text-xs">
-                      GitHub <Github size={12} className="ml-1" />
-                    </a>
+                  <div className="mt-6 flex gap-3">
+                    <Magnetic strength={0.2}>
+                      <a href="#" className="portfolio-btn text-xs">
+                        Live Demo <ArrowUpRight size={12} className="ml-1" />
+                      </a>
+                    </Magnetic>
+                    <Magnetic strength={0.2}>
+                      <a href="#" className="portfolio-btn text-xs">
+                        GitHub <Github size={12} className="ml-1" />
+                      </a>
+                    </Magnetic>
                   </div>
                 </div>
-              </motion.article>
+              </InteractiveCard>
             </ScrollReveal>
           ))}
         </div>

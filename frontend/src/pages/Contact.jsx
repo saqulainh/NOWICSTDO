@@ -1,26 +1,30 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, CheckCircle2, Clock, Zap, MessageCircle } from 'lucide-react';
-import SectionHeading from '../components/SectionHeading';
-import ScrollReveal from '../components/ScrollReveal';
-import { brand } from '../data/content';
-
-const contactInfo = [
-  { icon: Mail,   label: 'Email',    value: brand.email,    href: `mailto:${brand.email}` },
-  { icon: Phone,  label: 'Phone',    value: brand.phone,    href: `tel:${brand.phone}` },
-  { icon: MapPin, label: 'Location', value: brand.location, href: '#' },
-];
+import SectionHeading from '../components/common/SectionHeading';
+import ScrollReveal from '../components/reveal/ScrollReveal';
+import { brand as defaultBrand } from '../data/content';
+import { useContent } from '../context/ContentContext';
 
 const promise = [
-  { icon: Clock,         text: 'Response within 24 hours' },
-  { icon: CheckCircle2,  text: 'Free project roadmap included' },
-  { icon: Zap,           text: 'No-commitment discovery call' },
+  { icon: Clock, text: 'Response within 24 hours' },
+  { icon: CheckCircle2, text: 'Free project roadmap included' },
+  { icon: Zap, text: 'No-commitment discovery call' },
   { icon: MessageCircle, text: 'Direct access to founders' },
 ];
 
 const projectTypes = ['MVP Development', 'Business Website', 'AI Web App', 'Admin Dashboard', 'SaaS Platform', 'API / Backend', 'Other'];
 
 export default function Contact() {
+  const content = useContent();
+  const brand = content.brand || defaultBrand;
+
+  const contactInfo = [
+    { icon: Mail, label: 'Email', value: brand.email, href: `mailto:${brand.email}` },
+    { icon: Phone, label: 'Phone', value: brand.phone, href: `tel:${brand.phone}` },
+    { icon: MapPin, label: 'Location', value: brand.location, href: '#' },
+  ];
+
   const [form, setForm] = useState({ name: '', email: '', type: '', message: '' });
   const [sent, setSent] = useState(false);
   const handleChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
@@ -119,9 +123,9 @@ export default function Contact() {
                           <input id="contact-email" name="email" type="email" required value={form.email} onChange={handleChange} placeholder="Email" className="field !py-2 !h-[36px] !px-3 !text-[12px] bg-[#16171e] focus:bg-[#1e2028]" />
                         </div>
                       </div>
-                      
+
                       <hr className="h-px bg-[#34d99a]/30 border-none my-1" />
-                      
+
                       <div>
                         <span className="block text-[13px] font-semibold text-[#f0f0f3] mb-2 uppercase">Project Type</span>
                         <select id="contact-type" name="type" required value={form.type} onChange={handleChange} className="field !py-0 !h-[36px] !px-3 !text-[12px] !cursor-pointer bg-[#16171e] focus:bg-[#1e2028]">
@@ -133,7 +137,7 @@ export default function Contact() {
                       </div>
 
                       <hr className="h-px bg-[#34d99a]/30 border-none my-1" />
-                      
+
                       <div>
                         <span className="block text-[13px] font-semibold text-[#f0f0f3] mb-2 uppercase">Details</span>
                         <textarea id="contact-message" name="message" required rows={3} value={form.message} onChange={handleChange} placeholder="Describe your idea..." className="field resize-none !py-2 !px-3 !text-[12px] bg-[#16171e] focus:bg-[#1e2028]" />
@@ -146,8 +150,8 @@ export default function Contact() {
                 <div className="card bg-[#0e0f14] !rounded-t-none border-t border-[#34d99a]/40 shadow-2xl overflow-hidden relative z-0">
                   <div className="flex items-center justify-between py-2.5 px-2.5 pl-5 bg-[#34d99a]/10">
                     <label className="relative text-[22px] text-[#f0f0f3] font-black tracking-tight">Ready?</label>
-                    <motion.button 
-                      form="contact-form" 
+                    <motion.button
+                      form="contact-form"
                       type="submit"
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}

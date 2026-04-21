@@ -2,7 +2,8 @@
 import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
 import BrandLogo from './BrandLogo';
-import { brand, navLinks } from '../data/content';
+import { brand as defaultBrand, navLinks } from '../../data/content';
+import { useContent } from '../../context/ContentContext';
 
 /* ── SVG Social Icons (inline for tooltip animation) ── */
 function GmailIcon() {
@@ -46,6 +47,9 @@ function GithubIcon() {
 }
 
 export default function Footer() {
+  const content = useContent();
+  const brand = content.brand || defaultBrand;
+
   return (
     <footer className="mt-20 border-t border-subtle bg-panel">
       <div className="container-shell py-12">

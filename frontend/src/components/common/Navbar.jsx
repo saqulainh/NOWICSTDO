@@ -3,9 +3,12 @@ import { NavLink, Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import BrandLogo from './BrandLogo';
-import { brand, navLinks } from '../data/content';
+import { brand as defaultBrand, navLinks } from '../../data/content';
+import { useContent } from '../../context/ContentContext';
 
 export default function Navbar() {
+  const content = useContent();
+  const brand = content.brand || defaultBrand;
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
@@ -20,11 +23,10 @@ export default function Navbar() {
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled
+      className={`sticky top-0 z-50 transition-all duration-300 ${scrolled
           ? 'border-b border-subtle bg-bg/80 backdrop-blur-xl'
           : 'border-b border-transparent bg-transparent'
-      }`}
+        }`}
     >
       <div className="container-shell flex h-16 items-center justify-between">
 
@@ -52,9 +54,8 @@ export default function Navbar() {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`relative text-sm font-medium transition-colors duration-200 py-2 ${
-                  isActive ? 'text-text' : 'text-sub hover:text-text'
-                }`}
+                className={`relative text-sm font-medium transition-colors duration-200 py-2 ${isActive ? 'text-text' : 'text-sub hover:text-text'
+                  }`}
               >
                 {item.label}
                 {isActive && (
@@ -109,8 +110,7 @@ export default function Navbar() {
                   key={item.path}
                   to={item.path}
                   className={({ isActive }) =>
-                    `block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-                      isActive ? 'text-mint bg-white/5' : 'text-sub hover:text-text'
+                    `block rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${isActive ? 'text-mint bg-white/5' : 'text-sub hover:text-text'
                     }`
                   }
                 >

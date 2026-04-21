@@ -37,13 +37,13 @@ export default function ParticleHero({ className = '' }) {
           if (this.opacity <= 0) this.reset();
         }
       },
-      draw(ctx) {
+      draw(ctx, customX, customY) {
         // Muted Light Green / Off-road Green particles matching #bddfbc palette
         const r = 160 + Math.floor(Math.random() * 40);
         const g = 190 + Math.floor(Math.random() * 40);
         const b = 160 + Math.floor(Math.random() * 40);
         ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.opacity * 0.7})`;
-        ctx.fillRect(this.x, this.y, 0.5, Math.random() * 2 + 1);
+        ctx.fillRect(customX ?? this.x, customY ?? this.y, 0.5, Math.random() * 2 + 1);
       },
     };
     particle.reset();
@@ -69,7 +69,14 @@ export default function ParticleHero({ className = '' }) {
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particlesRef.current.forEach((p) => { p.update(); p.draw(ctx); });
+      const scrollY = typeof window !== 'undefined' ? window.scrollY : 0;
+      
+      particlesRef.current.forEach((p) => { 
+        p.update(); 
+        // Parallax: shift draw position based on scroll
+        const parallaxY = (p.y + scrollY * 0.15) % canvas.height;
+        p.draw(ctx, p.x, parallaxY); 
+      });
       animationRef.current = requestAnimationFrame(animate);
     };
 

@@ -15,12 +15,11 @@ export default function BrandTitle({ className = '' }) {
   };
 
   const letterVars = {
-    hidden: { opacity: 0, y: 40, rotateX: -90 },
+    hidden: { y: "110%", scaleY: 1.6 },
     show: { 
-      opacity: 1, 
       y: 0, 
-      rotateX: 0,
-      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+      scaleY: 1,
+      transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] }
     },
   };
 
@@ -38,24 +37,36 @@ export default function BrandTitle({ className = '' }) {
       {/* NOWIC: Bold, tight letter spacing */}
       <div className="flex font-black tracking-tighter text-[3.5rem] sm:text-[5rem] md:text-[6.5rem] leading-[0.85] text-white">
         {nowic.map((char, i) => (
-          <motion.span key={`n-${i}`} variants={letterVars} className="inline-block transform-gpu origin-bottom">
-            {char}
-          </motion.span>
+          <span key={`n-${i}`} className="inline-block overflow-hidden pb-1">
+            <motion.span 
+              variants={letterVars} 
+              className="inline-block transform-gpu"
+              style={{ display: 'inline-block' }}
+            >
+              {char}
+            </motion.span>
+          </span>
         ))}
       </div>
 
       {/* STUDIO: Light/Thin, slightly looser spacing, premium gradient */}
       <div className="flex font-light tracking-wide text-[3.5rem] sm:text-[5rem] md:text-[6.5rem] leading-[0.85] text-transparent bg-clip-text bg-gradient-to-br from-[#bddfbc] via-[#a7cfaa] to-[#8cb88f]">
         {studio.map((char, i) => (
-          <motion.span key={`s-${i}`} variants={letterVars} className="inline-block transform-gpu origin-bottom">
-            {char}
-          </motion.span>
+          <span key={`s-${i}`} className="inline-block overflow-hidden pb-1">
+            <motion.span 
+              variants={letterVars} 
+              className="inline-block transform-gpu"
+              style={{ display: 'inline-block' }}
+            >
+              {char}
+            </motion.span>
+          </span>
         ))}
       </div>
 
       {/* Premium accent dot with glow */}
       <motion.div
-        className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-[#bddfbc] relative"
+        className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 rounded-full bg-[#bddfbc] relative self-end mb-[0.2em]"
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.8, duration: 0.5, type: 'spring', stiffness: 200, damping: 12 }}

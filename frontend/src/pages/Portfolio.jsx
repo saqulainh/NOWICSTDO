@@ -1,13 +1,16 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUpRight, Github } from 'lucide-react';
-import SectionHeading from '../components/SectionHeading';
-import ScrollReveal from '../components/ScrollReveal';
-import { portfolioItems } from '../data/content';
+import SectionHeading from '../components/common/SectionHeading';
+import ScrollReveal from '../components/reveal/ScrollReveal';
+import { portfolioItems as defaultPortfolioItems } from '../data/content';
+import { useContent } from '../context/ContentContext';
 
 const FILTERS = ['All', 'Full-Stack Platform', 'Business Website', 'AI Web Application', 'Healthcare Platform'];
 
 export default function Portfolio() {
+  const content = useContent();
+  const portfolioItems = content.portfolioItems || defaultPortfolioItems;
   const [active, setActive] = useState('All');
   const filtered = active === 'All' ? portfolioItems : portfolioItems.filter((p) => p.category === active);
 
@@ -37,11 +40,10 @@ export default function Portfolio() {
                 key={f}
                 id={`filter-${f.replace(/\s+/g, '-').toLowerCase()}`}
                 onClick={() => setActive(f)}
-                className={`rounded-lg px-4 py-2 text-xs font-medium transition-all duration-200 ${
-                  active === f
+                className={`rounded-lg px-4 py-2 text-xs font-medium transition-all duration-200 ${active === f
                     ? 'bg-mint text-bg font-semibold'
                     : 'bg-surface text-sub border border-subtle hover:text-text'
-                }`}
+                  }`}
               >
                 {f}
               </button>

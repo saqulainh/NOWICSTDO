@@ -1,9 +1,12 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle2 } from 'lucide-react';
-import SectionHeading from '../components/SectionHeading';
-import ScrollReveal from '../components/ScrollReveal';
-import { services, faqs } from '../data/content';
+import SectionHeading from '../components/common/SectionHeading';
+import ScrollReveal from '../components/reveal/ScrollReveal';
+import InteractiveCard from '../components/ui/InteractiveCard';
+import Magnetic from '../components/ui/Magnetic';
+import { services as defaultServices, faqs as defaultFaqs } from '../data/content';
+import { useContent } from '../context/ContentContext';
 import { useState } from 'react';
 
 function FAQItem({ item, index }) {
@@ -38,6 +41,10 @@ function FAQItem({ item, index }) {
 }
 
 export default function Services() {
+  const content = useContent();
+  const services = content.services || defaultServices;
+  const faqs = content.faqs || defaultFaqs;
+
   return (
     <>
       {/* Hero */}
@@ -62,11 +69,7 @@ export default function Services() {
             const Icon = service.icon;
             return (
               <ScrollReveal key={service.title} delay={i * 0.06}>
-                <motion.article
-                  whileHover={{ y: -4 }}
-                  transition={{ duration: 0.25 }}
-                  className="feature-card group h-full"
-                >
+                <InteractiveCard className="feature-card h-full">
                   <div className="icon-box mb-4">
                     <Icon size={18} />
                   </div>
@@ -83,13 +86,15 @@ export default function Services() {
                       </li>
                     ))}
                   </ul>
-                  <Link
-                    to="/contact"
-                    className="mt-6 flex items-center gap-1 text-xs font-semibold text-mint opacity-0 transition-opacity group-hover:opacity-100"
-                  >
-                    Start This Project <ArrowRight size={12} />
-                  </Link>
-                </motion.article>
+                  <Magnetic strength={0.2}>
+                    <Link
+                      to="/contact"
+                      className="mt-8 flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-mint opacity-0 group-hover/inter:opacity-100 transition-all duration-300"
+                    >
+                      Start Project <ArrowRight size={14} />
+                    </Link>
+                  </Magnetic>
+                </InteractiveCard>
               </ScrollReveal>
             );
           })}
@@ -143,17 +148,22 @@ export default function Services() {
       {/* CTA */}
       <section className="container-shell pb-20">
         <ScrollReveal>
-          <div className="rounded-2xl bg-panel p-10 text-center sm:p-14" style={{ border: '1px solid #1e2028' }}>
-            <p className="eyebrow">Let's Build</p>
-            <h3 className="mt-4 font-display text-3xl font-bold text-text sm:text-4xl">
+          <div className="rounded-2xl bg-panel p-10 text-center sm:p-16 border border-white/5 relative overflow-hidden">
+            {/* Subtle glow behind CTA */}
+            <div className="absolute inset-0 bg-mint/5 blur-[120px] pointer-events-none" />
+
+            <p className="eyebrow relative z-10">Let's Build</p>
+            <h3 className="mt-4 font-display text-4xl font-bold text-text sm:text-5xl relative z-10">
               Ready to kick off your project?
             </h3>
-            <p className="mx-auto mt-3 max-w-lg text-sub">
+            <p className="mx-auto mt-4 max-w-xl text-sub relative z-10">
               Tell us your idea. We'll come back with a plan, timeline, and budget — no fluff.
             </p>
-            <Link to="/contact" className="cta-btn mt-8 inline-flex px-8 py-3.5">
-              Book a Free Discovery Call <ArrowRight size={15} className="ml-2" />
-            </Link>
+            <Magnetic>
+              <Link to="/contact" className="cta-btn mt-10 relative z-10">
+                Book a Free Discovery Call <ArrowRight size={15} className="ml-2" />
+              </Link>
+            </Magnetic>
           </div>
         </ScrollReveal>
       </section>
